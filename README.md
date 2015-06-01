@@ -20,6 +20,8 @@ The users will be able to search for NPO items based on a location. The general 
 
 **A preliminary sketch of what the application will look like.**
 
+Sketch:
+
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/sketch.jpg)
 
 **What data sets and data sources will you need, how you will get the data into the right form for your app.**
