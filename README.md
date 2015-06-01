@@ -1,2 +1,6 @@
-# NPOGeoFinder
-Programmeerproject Juni 2015; Jonathan Klaiber: NPO Geo Finder 
+# NPO GeoFinder
+-> Programmeerproject Juni 2015 <-
+
+-> Jonathan Klaiber 10004077 <- 
+
+
