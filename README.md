@@ -48,3 +48,6 @@ The external compoments are the NPO backstage API and the google maps API.
 I see potential problems with regard to the fetching of the data, especially how easily the data can be obtained and how fast it will be (it should be not to slow).
 
 **A short review of similar applications or visualizations in terms of features and possibly technical aspects.**
+
+I found a [Youtube video search by location](http://ctrlq.org/youtube/). On this website a location can be specified and based on that
+location Youtube videos that have been created there are shown. 
