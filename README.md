@@ -50,4 +50,10 @@ I see potential problems with regard to the fetching of the data, especially how
 **A short review of similar applications or visualizations in terms of features and possibly technical aspects.**
 
 I found a [Youtube video search by location](http://ctrlq.org/youtube/). On this website a location can be specified and based on that
-location Youtube videos that have been created there are shown. 
+location Youtube videos are shown that have been created. The Youtube video finder application seems to function well in terms of specifying
+a location. The instructions are clear and the handling is intuitive. However, the linking of a loation to a youtube video does not work well.
+As I see it, the specified location has to match the location of the youtube video exactly, otherwise no results are found. Videos are seldomly 
+found due to the exact machting constraint. With regard to my application, the location video matching should be based on approximaty and not on
+the exact location. The "tooltip" of the Youtube video search by location is nicely implemented. The "tooltip" shows a small preview of the video 
+that was found. With a click on the video preview, the actual video player in a extended tooltip is opened and the video is played. For my application a link to an 
+external source (e.g. "uitzendinggemist.nl") will be sufficient. 
