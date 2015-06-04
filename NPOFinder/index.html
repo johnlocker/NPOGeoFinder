@@ -86,27 +86,73 @@ Programmeer Project Juni 2015
         google.maps.event.addListener(map, 'bounds_changed', function() {
           var bounds = map.getBounds();
           //bounds.za = bounds.za * 1.1
-          console.log('bounds.za')
-          console.log(bounds.za)
-          console.log('bounds.qa')
-          console.log(bounds.qa)
+          // console.log('bounds.za')
+          // console.log(bounds.za)
+          // console.log('bounds.qa')
+          // console.log(bounds.qa)
           searchBox.setBounds(bounds);
         });
       }
 
-
-
       google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+      function createRequest() {
+        var result = null;
+        if (window.XMLHttpRequest) {
+          // FireFox, Safari, etc.
+          result = new XMLHttpRequest();
+          if (typeof xmlhttp.overrideMimeType != 'undefined') {
+            result.overrideMimeType('text/xml'); // Or anything else
+          }
+        }
+        else if (window.ActiveXObject) {
+          // MSIE
+          result = new ActiveXObject("Microsoft.XMLHTTP");
+        } 
+        else {
+          // No known mechanism -- consider aborting the application
+        }
+        return result;
+      }
+      var req = createRequest(); // defined above
+      // Create the callback:
+      req.onreadystatechange = function() {
+        if (req.readyState != 4) return; // Not there yet
+        if (req.status != 200) {
+          // Handle request failure here...
+          return;
+        }
+        // Request successful, read the response
+        var resp = req.responseText;
+        console.log('Reg')
+        console.log(resp)
+        // ... and use it as needed by your app.
+      }
+
+      req.open("GET", "http://backstage-docs.openstate.eu", true);
+      req.send();
 
     </script>
 
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map-canvas"></div>
 
-    <div id="pagetitle"> 
+    <div id="pagetitle" class="intro"> 
       NPO Geo Finder
     </div>
+    <div id="introtext" class="intro"> 
+      Please enter a location to find NPO Journalistiek items (full episodes or video fragments) associated with the location.
+    </div>
+
     <div id="episodelist">
+      <ol>
+        <li>'Noord-Zuid lijn bijna af.' 6 km</li>
+        <li>'Subsidie bezuiningen zwaarder d' 10 km</li>
+        <li>'Ajax op goede weg?' 20 km</li>
+      </ol> 
     </div>
 
   </body>

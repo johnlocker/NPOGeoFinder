@@ -1,7 +1,7 @@
 body {
   background-image: url("images/npo_background.jpg");
+  font-family: arial;
 }
-
 
 html, body, #map-canvas {
     height: 65%;
@@ -9,6 +9,9 @@ html, body, #map-canvas {
     margin: 10px;
     padding: 10px
   }
+ol {
+  font-size: 14px;
+}
 
 #map-canvas {
   position: absolute;
@@ -25,13 +28,26 @@ html, body, #map-canvas {
   height: 65%;
   width: 20%;
 }
+.intro {
+  color: #ff6d00;
+  margin-left: 10px;
+}
+#introtext {
+  position: absolute;
+  top: 130px;
+  left: 100px;
+  background-color: black;
+  height: 20px;
+  width: 60%;
+  margin: 10px;
+  padding: 10px
+
+}
 #pagetitle {
   position: absolute;
-  top: 100px;
+  top: 60px;
   left: 100px;
-  color: #ff6d00;
   font-size: 40px;
-  font-family: arial;
   font-weight: bold;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   font-style: italic;
