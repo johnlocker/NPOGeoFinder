@@ -24,7 +24,7 @@ Objects:
   
  Methods:
  
- 1. NPO API method:
+1. NPO API method:
 	- SET search query
 	- GET argument based on search query
 	- TRANS put return data into NPO item object
