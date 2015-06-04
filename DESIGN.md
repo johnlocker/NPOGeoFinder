@@ -37,7 +37,7 @@ Objects:
 
 **Provide advanced sketches of UIs that clearly explain which features are connected to which underlying classes.**
 
-![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/flowdiagram.png)
+![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/flow_diagram.png)
 
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/sketch2.png)
 
