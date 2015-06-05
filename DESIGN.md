@@ -3,7 +3,8 @@
 
 **What is the minimum viable product? What are possible supplementary features on top of the minimum product?**
 
-Minimum viable Product:
+Minimum viable Product: 
+
 The minimum viable version of the NPO GeoFinder website consists of a search entry box, a list of search results and a map. The user must be able to 
 insert a location and subsequently get this location displayed with a marker on the map. All NPO video should be displayed as markers on the map, within the borders of the map (I haven't specified yet exactly what section of the map is visible
 around the location). Displaying the markers will either happen automatically or by pressing a show marker button. The list of search results must display the 10 most proximate search results
@@ -12,6 +13,7 @@ Up to now, only the NPO Journalistiek items have become available online through
 don't know yet when other items will be available. 
 
 Supplementary features:
+
 When time is left, a filter function will be implemented to filter the search query by date and television program.
 Extra time will also be allocated into improving the visualization. 
 
