@@ -18,6 +18,9 @@ Programmeer Project Juni 2015
     <script>
       function initialize() {
 
+        // Constants
+        var boundsScaling = 0.00028;
+
         var markers = [];
         var map = new google.maps.Map(document.getElementById('map-canvas'), {
           mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -75,6 +78,12 @@ Programmeer Project Juni 2015
 
 
             bounds.extend(place.geometry.location);
+       
+            bounds.za.A = bounds.za.A * (1 + boundsScaling);
+            bounds.za.j = bounds.za.j * (1 - boundsScaling);
+            bounds.qa.A = bounds.qa.A * (1 + boundsScaling);
+            bounds.qa.j = bounds.qa.j * (1 - boundsScaling);
+
           }
 
           map.fitBounds(bounds);
@@ -85,11 +94,7 @@ Programmeer Project Juni 2015
         // current map's viewport.
         google.maps.event.addListener(map, 'bounds_changed', function() {
           var bounds = map.getBounds();
-          //bounds.za = bounds.za * 1.1
-          // console.log('bounds.za')
-          // console.log(bounds.za)
-          // console.log('bounds.qa')
-          // console.log(bounds.qa)
+  
           searchBox.setBounds(bounds);
         });
       }
@@ -127,13 +132,15 @@ Programmeer Project Juni 2015
         }
         // Request successful, read the response
         var resp = req.responseText;
-        console.log('Reg')
-        console.log(resp)
         // ... and use it as needed by your app.
       }
 
-      req.open("GET", "http://backstage-docs.openstate.eu", true);
-      req.send();
+      req.open("POST", "http://backstage-api.openstate.eu/v0/journalistiek/search", true);
+      var params = JSON.stringify({ "query": "leenstelsel", "size": 5 });
+      req.send(params);
+
+      console.log('Request:')
+      console.log(req)
 
     </script>
 
