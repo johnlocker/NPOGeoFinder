@@ -73,6 +73,8 @@ Programmeer Project Juni 2015
               title: place.name,
               position: place.geometry.location
             });
+            //console.log('place.geometry.location')
+            //console.log(place.geometry.location)
 
             markers.push(marker);
 
@@ -92,8 +94,37 @@ Programmeer Project Juni 2015
 
         // Bias the SearchBox results towards places that are within the bounds of the
         // current map's viewport.
+        var firstload = true;
         google.maps.event.addListener(map, 'bounds_changed', function() {
           var bounds = map.getBounds();
+
+          req.open("POST", "http://backstage-api.openstate.eu/v0/journalistiek/search", true);
+          var params = JSON.stringify({ "query": "leenstelsel", "size": 5 });
+          req.send(params);
+
+          if (!firstload) {
+            var npoJournalistiek = 'images/npo_journalistiek_logo_small.png';
+            var myLatLng = new google.maps.LatLng(52.3702166, 4.8951678999);
+            var id = 56875
+            var npoMarker = new google.maps.Marker({
+              position: myLatLng,
+              map: map,
+              animation: google.maps.Animation.DROP,
+              icon: npoJournalistiek,
+              id: id
+            });
+            //google.maps.event.addListener(npoMarker, 'mouseover', tooltip);
+          }
+          firstload = false
+
+          
+          function tooltip() {
+              
+          }
+
+
+          // console.log('Request:')
+          // console.log(req.onreadystatechange())
   
           searchBox.setBounds(bounds);
         });
@@ -104,14 +135,15 @@ Programmeer Project Juni 2015
 
 
 
+
       function createRequest() {
         var result = null;
         if (window.XMLHttpRequest) {
           // FireFox, Safari, etc.
           result = new XMLHttpRequest();
-          if (typeof xmlhttp.overrideMimeType != 'undefined') {
-            result.overrideMimeType('text/xml'); // Or anything else
-          }
+          // if (typeof xmlhttp.overrideMimeType != 'undefined') {
+          //   result.overrideMimeType('text/xml'); // Or anything else
+          // }
         }
         else if (window.ActiveXObject) {
           // MSIE
@@ -135,12 +167,62 @@ Programmeer Project Juni 2015
         // ... and use it as needed by your app.
       }
 
-      req.open("POST", "http://backstage-api.openstate.eu/v0/journalistiek/search", true);
-      var params = JSON.stringify({ "query": "leenstelsel", "size": 5 });
-      req.send(params);
 
-      console.log('Request:')
-      console.log(req)
+      var item = new ItemMarker(542588,
+                                'Hoe verder met ajax', 
+                                'Amsterdam', 
+                                [52.524268, 13.406290], 
+                                "www.npo.nl", 
+                                'June player transfers of Ajax',
+                                [52.3702157, 4.8951678999])
+
+      // console.log('item')
+      // console.log(item.place())
+
+
+
+ 
+      function ItemMarker(id, title, locationChar, locationGeo, link, description, locationMarker) {
+        this.id = id,
+        this.title = title;
+        this.locationChr = locationChar;
+        this.locationGeo = locationGeo;
+        this.link = link;
+        this.description = description;
+        this.distance = distance(locationMarker[0],
+                                 locationMarker[1],
+                                 locationGeo[0],
+                                 locationGeo[1]);
+        this.place = function () {
+          return this.title + ' ' + distance.toString() ;
+        }
+      }
+
+      // Math.round(this.distance * 100) * 0.01
+
+    // Slightly modified distance function from 
+    // http://www.geodatasource.com/developers/javascript retrieved on 08.06.2015
+    function distance(lat1, lon1, lat2, lon2) {
+      var radlat1 = Math.PI * lat1 / 180
+      var radlat2 = Math.PI * lat2 / 180
+      var radlon1 = Math.PI * lon1 / 180
+      var radlon2 = Math.PI * lon2 / 180
+      var theta = lon1 - lon2
+      var radtheta = Math.PI * theta/180
+      var dist = Math.sin(radlat1) 
+                 * Math.sin(radlat2) 
+                 + Math.cos(radlat1) 
+                 * Math.cos(radlat2) 
+                 * Math.cos(radtheta);
+      dist = Math.acos(dist)
+      dist = dist * 180/Math.PI
+      dist = dist * 60 * 1.1515
+      // Distance in kilometers
+      dist = dist * 1.609344
+      dist = Math.round(dist * 100) * 0.01
+      return dist
+    }
+
 
     </script>
 
