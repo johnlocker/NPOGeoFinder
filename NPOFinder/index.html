@@ -98,33 +98,55 @@ Programmeer Project Juni 2015
         google.maps.event.addListener(map, 'bounds_changed', function() {
           var bounds = map.getBounds();
 
-          req.open("POST", "http://backstage-api.openstate.eu/v0/journalistiek/search", true);
-          var params = JSON.stringify({ "query": "leenstelsel", "size": 5 });
-          req.send(params);
+
+          // here gets the data fetched:
+
+          var item = new ItemMarker(542588,
+                                    'Hoe verder met ajax?', 
+                                    '05.06.2015',
+                                    'Amsterdam', 
+                                    [52.524268, 4.92], 
+                                    "http://www.npo.nl", 
+                                    'June player transfers of Ajax',
+                                    [52.3702157, 4.8951678999])
 
           if (!firstload) {
             var npoJournalistiek = 'images/npo_journalistiek_logo_small.png';
-            var myLatLng = new google.maps.LatLng(52.3702166, 4.8951678999);
-            var id = 56875
+            var googleLatLng = new google.maps.LatLng(item.locationLat, item.locationLong);
+            var id = item.id
             var npoMarker = new google.maps.Marker({
-              position: myLatLng,
+              position: googleLatLng,
               map: map,
-              animation: google.maps.Animation.DROP,
+              // animation: google.maps.Animation.DROP,
               icon: npoJournalistiek,
               id: id
             });
-            //google.maps.event.addListener(npoMarker, 'mouseover', tooltip);
+            //
           }
           firstload = false
+          var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<div id="bodyContent">'+
+            '<p><b>Title: </b>' + item.title + '<br>' +
+            '<b>Date: </b>' + item.date + '<br>' +
+            '<b>Link: </b> <a href="' + item.link +'" target="_blank">'+
+            'uitzendinggemist.nl</a> ' + 
+            '</p>'+
+            '</div>'+
+            '</div>';
 
-          
-          function tooltip() {
-              
-          }
 
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
 
-          // console.log('Request:')
-          // console.log(req.onreadystatechange())
+          google.maps.event.addListener(npoMarker, 'click', function() {
+            infowindow.open(map, npoMarker);
+          });
+
+    
+
   
           searchBox.setBounds(bounds);
         });
@@ -164,38 +186,40 @@ Programmeer Project Juni 2015
         }
         // Request successful, read the response
         var resp = req.responseText;
-        // ... and use it as needed by your app.
+        // ... and use it as needed by your app
+        req.open("POST", 'http://backstage-api.openstate.eu/v0/search', true);
+        var params = JSON.stringify('{"query": "leenstelsel","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}');
+        req.send(params);
+
+        console.log('response')
+        console.log(req.content)
       }
 
 
-      var item = new ItemMarker(542588,
-                                'Hoe verder met ajax', 
-                                'Amsterdam', 
-                                [52.524268, 13.406290], 
-                                "www.npo.nl", 
-                                'June player transfers of Ajax',
-                                [52.3702157, 4.8951678999])
 
-      // console.log('item')
-      // console.log(item.place())
+
+
+      //console.log('item')
+      //console.log(item.list)
 
 
 
  
-      function ItemMarker(id, title, locationChar, locationGeo, link, description, locationMarker) {
+      function ItemMarker(id, title, date, locationChar, locationGeo, link, description, locationMarker) {
         this.id = id,
         this.title = title;
+        this.date = date;
         this.locationChr = locationChar;
-        this.locationGeo = locationGeo;
+        this.locationLat = locationGeo[0];
+        this.locationLong = locationGeo[1];
         this.link = link;
         this.description = description;
         this.distance = distance(locationMarker[0],
                                  locationMarker[1],
                                  locationGeo[0],
                                  locationGeo[1]);
-        this.place = function () {
-          return this.title + ' ' + distance.toString() ;
-        }
+        this.list =  this.title + ' ' + this.distance.toString() + ' km' ;
+        
       }
 
       // Math.round(this.distance * 100) * 0.01
