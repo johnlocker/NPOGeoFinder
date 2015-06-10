@@ -95,11 +95,55 @@ Programmeer Project Juni 2015
         // Bias the SearchBox results towards places that are within the bounds of the
         // current map's viewport.
         var firstload = true;
+        var req = createRequest(); // defined above
         google.maps.event.addListener(map, 'bounds_changed', function() {
           var bounds = map.getBounds();
 
 
           // here gets the data fetched:
+          console.log('req')
+          console.log(req)
+          url1 = 'http://backstage-api.openstate.eu/v0/search'
+          url2 = "http://backstage-api.openstate.eu/v0/sources"
+          url3 = 'http://backstage-api.openstate.eu/v0/journalistiek/search'
+          url4 = 'http://backstage-api.openstate.eu/v0/npo_journalistiek/journalistiek_Oben_290_37227'
+          
+          
+          // Create the callback:
+          req.onreadystatechange = function() {
+            if (req.readyState != 4) return; // Not there yet
+            if (req.status != 200) {
+              // Handle request failure here...
+              return;
+            }
+            // Request successful, read the response
+            var resp = req.responseText;
+            // ... and use it as needed by your app
+
+            console.log('resp')
+            console.log(resp)
+          }
+
+          req.onreadystatechange()
+          // end of data fetching
+          
+          // var arguments = '{"query": "ajax","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}';
+          arguments = '{"query": "Noord", "filters": { "date": { "from": "2011-12-24", "to": "2015-12-28"}}}';
+          // req.open("GET", url2, true);
+          // req.send();
+
+          query = 'POST'
+
+          if (query == 'GET') {
+            req.open("GET", url4, true);
+            req.send();
+          } else {
+            req.open("POST", url3, true);
+            req.setRequestHeader("Content-Type",
+                       "application/x-www-form-urlencoded");
+            req.send(arguments);
+          }
+
 
           var item = new ItemMarker(542588,
                                     'Hoe verder met ajax?', 
@@ -109,6 +153,10 @@ Programmeer Project Juni 2015
                                     "http://www.npo.nl", 
                                     'June player transfers of Ajax',
                                     [52.3702157, 4.8951678999])
+
+
+
+
 
           if (!firstload) {
             var npoJournalistiek = 'images/npo_journalistiek_logo_small.png';
@@ -123,7 +171,9 @@ Programmeer Project Juni 2015
             });
             //
           }
+
           firstload = false
+
           var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
@@ -138,7 +188,8 @@ Programmeer Project Juni 2015
 
 
           var infowindow = new google.maps.InfoWindow({
-            content: contentString
+            content: contentString,
+            maxWidth: 200
           });
 
           google.maps.event.addListener(npoMarker, 'click', function() {
@@ -163,9 +214,9 @@ Programmeer Project Juni 2015
         if (window.XMLHttpRequest) {
           // FireFox, Safari, etc.
           result = new XMLHttpRequest();
-          // if (typeof xmlhttp.overrideMimeType != 'undefined') {
-          //   result.overrideMimeType('text/xml'); // Or anything else
-          // }
+          if (typeof result.overrideMimeType != 'undefined') {
+            result.overrideMimeType('text/xml'); // Or anything else
+          }
         }
         else if (window.ActiveXObject) {
           // MSIE
@@ -176,24 +227,8 @@ Programmeer Project Juni 2015
         }
         return result;
       }
-      var req = createRequest(); // defined above
-      // Create the callback:
-      req.onreadystatechange = function() {
-        if (req.readyState != 4) return; // Not there yet
-        if (req.status != 200) {
-          // Handle request failure here...
-          return;
-        }
-        // Request successful, read the response
-        var resp = req.responseText;
-        // ... and use it as needed by your app
-        req.open("POST", 'http://backstage-api.openstate.eu/v0/search', true);
-        var params = JSON.stringify('{"query": "leenstelsel","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}');
-        req.send(params);
 
-        console.log('response')
-        console.log(req.content)
-      }
+    
 
 
 
