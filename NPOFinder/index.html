@@ -16,15 +16,24 @@ Programmeer Project Juni 2015
     <script src="d3.js"></script>
     
     <script>
+      // Constants
+      var resp = null;
+      var markers = [];
+      var listArray = [];
+
+
+
       function initialize() {
 
         // Constants
         var boundsScaling = 0.00028;
 
-        var markers = [];
+
+        // var markers = [];
         var map = new google.maps.Map(document.getElementById('map-canvas'), {
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
+
 
         var defaultBounds = new google.maps.LatLngBounds(
             new google.maps.LatLng(51.5, 5),
@@ -45,6 +54,7 @@ Programmeer Project Juni 2015
         // Listen for the event fired when the user selects an item from the
         // pick list. Retrieve the matching places for that item.
         google.maps.event.addListener(searchBox, 'places_changed', function() {
+          deleteMarkers()
           var places = searchBox.getPlaces();
 
           if (places.length == 0) {
@@ -86,117 +96,134 @@ Programmeer Project Juni 2015
             bounds.qa.A = bounds.qa.A * (1 + boundsScaling);
             bounds.qa.j = bounds.qa.j * (1 - boundsScaling);
 
-          }
+            var req = createRequest();
+            console.log('req')
+            console.log(req)
+            url1 = 'http://backstage-api.openstate.eu/v0/search'
+            url2 = "http://backstage-api.openstate.eu/v0/sources"
+            url3 = 'http://backstage-api.openstate.eu/v0/journalistiek/search'
+            url4 = 'http://backstage-api.openstate.eu/v0/npo_journalistiek/journalistiek_Oben_290_37227'
 
+
+            var markerGeo = place.geometry.location;
+            var markerName = place.name;
+
+
+            
+            // Create the callback:
+            req.onreadystatechange = function() {
+              if (req.readyState != 4) return; // Not there yet
+              if (req.status != 200) {
+                // Handle request failure here...
+                return;
+              }
+              // Request successful, read the response
+              resp = req.responseText;
+              // ... and use it as needed by your app
+
+              // console.log('resp')
+              // console.log(resp)
+              var obj = JSON.parse(resp);
+              var hits = obj.hits.hits
+
+              // parseDate(hits[i]._source.Date.substring(0,hits[i]._source.Date.indexOf("T")))
+
+              console.log("Number hits")
+              console.log(hits.length)
+              var markerArray = [];
+              var program = null;
+              listArray = []
+              for (var i = 0; i < hits.length; i++) {
+
+                if(hits[i]._source.Broadcasters != null) {
+                    program = hits[i]._source.Broadcasters[0].Name
+                }
+                // console.log('Hit')
+                // console.log(hits[i]._source)
+
+                
+                if(hits[i]._source.Locations != null) {
+
+                  var item = new ItemMarker(hits[i]._source.Id,
+                                            hits[i]._source.Title,
+                                            program,
+                                            parseDate(hits[i]._source.Date.replaceAt(10,' ')),
+                                            hits[i]._source.Locations[0].Name,
+                                            hits[i]._source.Locations[0].GeoPoint.Latitude,
+                                            hits[i]._source.Locations[0].GeoPoint.Longitude,
+                                            hits[i]._source.Url, 
+                                            hits[i]._source.description,
+                                            [markerGeo.A, markerGeo.F])
+                   markerArray.push(item)
+
+
+                } else {
+                  var item = new ItemMarker(hits[i]._source.Id,
+                                            hits[i]._source.Title,
+                                            program,
+                                            parseDate(hits[i]._source.Date.replaceAt(10,' ')),
+                                            markerName,
+                                            null,
+                                            null,
+                                            hits[i]._source.Url, 
+                                            hits[i]._source.description,
+                                            [markerGeo.A, markerGeo.F])
+
+
+                  listArray.push(item)
+                }
+              }
+              console.log('marker Length')
+              console.log(markerArray.length)
+              console.log('list Length')
+              console.log(listArray.length)
+
+              if (markerArray.length > 0) {
+                for (var i = 0; i < markerArray.length; i++) {
+                  placeMarker(map, markerArray[i])
+                }
+                
+              }
+              
+
+
+
+            }
+
+            req.onreadystatechange()
+
+
+            // var arguments = '{"query": "ajax","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}';
+            // , "filters": {"media_content_type": {"terms": ['video/avi', 'video/mpeg', 'video/quicktime']}}
+            arguments = '{"query": "' + place.name + '","size": 100, "sort": "date"}';
+            // req.open("GET", url2, true);
+            // req.send();
+
+            query = 'POST'
+
+            if (query == 'GET') {
+              req.open("GET", url4, true);
+              req.send();
+            } else {
+              req.open("POST", url3, true);
+              req.setRequestHeader("Content-Type",
+                         "application/x-www-form-urlencoded");
+              req.send(arguments);
+            }
+
+
+
+          }
           map.fitBounds(bounds);
         });
         // [END region_getplaces]
 
         // Bias the SearchBox results towards places that are within the bounds of the
         // current map's viewport.
-        var firstload = true;
-        var req = createRequest(); // defined above
+         // defined above
         google.maps.event.addListener(map, 'bounds_changed', function() {
           var bounds = map.getBounds();
 
-
-          // here gets the data fetched:
-          console.log('req')
-          console.log(req)
-          url1 = 'http://backstage-api.openstate.eu/v0/search'
-          url2 = "http://backstage-api.openstate.eu/v0/sources"
-          url3 = 'http://backstage-api.openstate.eu/v0/journalistiek/search'
-          url4 = 'http://backstage-api.openstate.eu/v0/npo_journalistiek/journalistiek_Oben_290_37227'
-          
-          
-          // Create the callback:
-          req.onreadystatechange = function() {
-            if (req.readyState != 4) return; // Not there yet
-            if (req.status != 200) {
-              // Handle request failure here...
-              return;
-            }
-            // Request successful, read the response
-            var resp = req.responseText;
-            // ... and use it as needed by your app
-
-            console.log('resp')
-            console.log(resp)
-          }
-
-          req.onreadystatechange()
-          // end of data fetching
-          
-          // var arguments = '{"query": "ajax","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}';
-          arguments = '{"query": "Noord", "filters": { "date": { "from": "2011-12-24", "to": "2015-12-28"}}}';
-          // req.open("GET", url2, true);
-          // req.send();
-
-          query = 'POST'
-
-          if (query == 'GET') {
-            req.open("GET", url4, true);
-            req.send();
-          } else {
-            req.open("POST", url3, true);
-            req.setRequestHeader("Content-Type",
-                       "application/x-www-form-urlencoded");
-            req.send(arguments);
-          }
-
-
-          var item = new ItemMarker(542588,
-                                    'Hoe verder met ajax?', 
-                                    '05.06.2015',
-                                    'Amsterdam', 
-                                    [52.524268, 4.92], 
-                                    "http://www.npo.nl", 
-                                    'June player transfers of Ajax',
-                                    [52.3702157, 4.8951678999])
-
-
-
-
-
-          if (!firstload) {
-            var npoJournalistiek = 'images/npo_journalistiek_logo_small.png';
-            var googleLatLng = new google.maps.LatLng(item.locationLat, item.locationLong);
-            var id = item.id
-            var npoMarker = new google.maps.Marker({
-              position: googleLatLng,
-              map: map,
-              // animation: google.maps.Animation.DROP,
-              icon: npoJournalistiek,
-              id: id
-            });
-            //
-          }
-
-          firstload = false
-
-          var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<div id="bodyContent">'+
-            '<p><b>Title: </b>' + item.title + '<br>' +
-            '<b>Date: </b>' + item.date + '<br>' +
-            '<b>Link: </b> <a href="' + item.link +'" target="_blank">'+
-            'uitzendinggemist.nl</a> ' + 
-            '</p>'+
-            '</div>'+
-            '</div>';
-
-
-          var infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            maxWidth: 200
-          });
-
-          google.maps.event.addListener(npoMarker, 'click', function() {
-            infowindow.open(map, npoMarker);
-          });
-
-    
 
   
           searchBox.setBounds(bounds);
@@ -228,7 +255,72 @@ Programmeer Project Juni 2015
         return result;
       }
 
-    
+      // Sets the map on all markers in the array.
+      function setAllMap(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+
+      // Removes the markers from the map, but keeps them in the array.
+      function clearMarkers() {
+        setAllMap(null);
+      }
+
+      // Deletes all markers in the array by removing references to them.
+      function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+      }
+
+      function placeList(list, item) {
+
+      }
+
+
+
+      function placeMarker(map, item) {
+        var googleLatLng = new google.maps.LatLng(item.locationLat, item.locationLong);
+
+        var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
+                            'max', 'ncrv', 'tros', 'vara',
+                            'vpro']
+
+        if (programArray.indexOf(item.program.toLowerCase()) > -1) {
+          var icon = 'images/' + item.program.toLowerCase() + '_logo_small.png'
+        } else {
+          var icon = 'images/npo_journalistiek_logo_small.png' 
+        }
+
+        var marker = new google.maps.Marker({
+                  position: googleLatLng,
+                  map: map,
+                  icon: icon,
+                  id: item.id
+        });
+        var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<div id="bodyContent">'+
+            '<p><b>Title: </b>' + item.title + '<br>' +
+            '<b>Date: </b>' + transDate(item.date) + '<br>' +
+            '<b>Link: </b> <a href="' + item.link +'" target="_blank">'+
+            item.link.substring(item.link.indexOf('//') + 2, item.link.indexOf('.nl') + 3) + '</a> <br> <br>' +
+             '<b> Description: </b> <br>' + item.description.substring(item.description.indexOf('<p>'), item.description.indexOf('</p>')) + 
+            '</p>'+
+            '</div>'+
+            '</div>';
+
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            maxWidth: 250
+          });
+
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+        });
+      }
 
 
 
@@ -236,24 +328,32 @@ Programmeer Project Juni 2015
 
       //console.log('item')
       //console.log(item.list)
-
+      // From http://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript retrieved on 11.06.2015
+      String.prototype.replaceAt=function(index, character) {
+          return this.substr(0, index) + character + this.substr(index+character.length);
+      }
 
 
  
-      function ItemMarker(id, title, date, locationChar, locationGeo, link, description, locationMarker) {
+      function ItemMarker(id, title, program, date, locationChar, latitude, longitude, link, description, locationMarker) {
         this.id = id,
         this.title = title;
         this.date = date;
         this.locationChr = locationChar;
-        this.locationLat = locationGeo[0];
-        this.locationLong = locationGeo[1];
+        this.locationLat = latitude;
+        this.locationLong = longitude;
         this.link = link;
         this.description = description;
         this.distance = distance(locationMarker[0],
                                  locationMarker[1],
-                                 locationGeo[0],
-                                 locationGeo[1]);
+                                 latitude,
+                                 longitude);
         this.list =  this.title + ' ' + this.distance.toString() + ' km' ;
+        if (program != null) {
+          this.program = program;
+        } else {
+          this.program = 'NPO Journalstiek'
+        }
         
       }
 
@@ -281,7 +381,45 @@ Programmeer Project Juni 2015
       dist = Math.round(dist * 100) * 0.01
       return dist
     }
+    var parseDate = d3.time.format("%Y-%m-%d %X").parse
+    var transDate = d3.time.format("%d-%m-%Y")
 
+    function expand(d) {
+      d3.select(this)
+          .on("click", null)
+        .append("ul")
+        .selectAll("li")
+          .data(d.links)
+        .enter().append("li")
+          .text(function(d) { return d; });
+    }
+
+      var data = [
+                  {"name":"foo", "links":["a", "b", "c"]}, 
+                  {"name":"bar", "links":["d", "e", "f"]}
+                 ]
+
+      var episodelist = d3.select("episodelist").append("ul");
+      episodelist.selectAll("li")
+        .data(data)
+        .enter()
+        .append("li")
+          .text(function(d){return d.name;})
+      var infos = episodelist.append("ul")
+        .selectAll("li")
+        .data(function(d){return d.links})
+        .enter()
+        .append("li")
+           .text(function(d){return d})
+      episodelist.selectAll("li")
+        .data(listArray[0])
+        .enter()
+        .append("li")
+          .text(function(d){return d.name;})
+          .on("click", expand)
+
+
+    
 
     </script>
 
@@ -296,11 +434,11 @@ Programmeer Project Juni 2015
     </div>
 
     <div id="episodelist">
-      <ol>
+<!--       <ol>
         <li>'Noord-Zuid lijn bijna af.' 6 km</li>
         <li>'Subsidie bezuiningen zwaarder d' 10 km</li>
         <li>'Ajax op goede weg?' 20 km</li>
-      </ol> 
+      </ol>  -->
     </div>
 
   </body>

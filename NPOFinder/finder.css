@@ -4,13 +4,19 @@ body {
 }
 
 html, body, #map-canvas {
-    height: 65%;
-    width: 60%;
+    height: 500px;
+    width: 1000px;
     margin: 10px;
     padding: 10px
   }
 ol {
   font-size: 14px;
+}
+ul {
+  margin: 10px;
+  position: relative;
+  left: 10px;
+  top: 10px;
 }
 
 #map-canvas {
@@ -20,13 +26,13 @@ ol {
 }
 #episodelist {
   background-color: white;
-  opacity: 70%;
   margin: 10px;
   position: absolute;
-  right: 100px;
+  left: 1200px;
   top: 200px;
-  height: 65%;
-  width: 20%;
+  height: 500px;
+  width: 300px;
+  font-style: white;
 }
 .intro {
   color: #ff6d00;
@@ -38,7 +44,7 @@ ol {
   left: 100px;
   background-color: black;
   height: 20px;
-  width: 60%;
+  width: 1000px;
   margin: 10px;
   padding: 10px
 
