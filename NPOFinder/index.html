@@ -184,6 +184,36 @@ Programmeer Project Juni 2015
                 }
                 
               }
+
+
+              var data = [
+                    {"name":"npo", "links":["npo.nl", "nos.nl"]}, 
+                    {"name":"ajax", "links":["ajax.nl", "eredivisie.nl", "f"]}
+                         ]
+
+              console.log('data print')
+              console.log(data)
+
+              var episodelist = d3.select("#episodelist").append("ul");
+              episodelist.selectAll("li")
+                  .data(data)
+                  .enter()
+                  .append("li")
+                    .text(function(d){return d.name;})
+                    .on("click", expand)
+
+              // var infos = episodelist.selectAll("li")
+              //     .append("ul")
+              //     .data(function(d){return d.links})
+              //     .enter()
+              //     .append("li")
+              //      .text(function(d){return d})
+              // episodelist.selectAll("li")
+              //   .data(data)
+              //   .enter()
+              //   .append("li")
+              //     .text(function(d){return d.name;})
+              //     .on("click", expand)
               
 
 
@@ -195,7 +225,8 @@ Programmeer Project Juni 2015
 
             // var arguments = '{"query": "ajax","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}';
             // , "filters": {"media_content_type": {"terms": ['video/avi', 'video/mpeg', 'video/quicktime']}}
-            arguments = '{"query": "' + place.name + '","size": 100, "sort": "date"}';
+            // , "sort": "date"
+            arguments = '{"query": "' + place.name + '","size": 100}';
             // req.open("GET", url2, true);
             // req.send();
 
@@ -394,29 +425,7 @@ Programmeer Project Juni 2015
           .text(function(d) { return d; });
     }
 
-      var data = [
-                  {"name":"foo", "links":["a", "b", "c"]}, 
-                  {"name":"bar", "links":["d", "e", "f"]}
-                 ]
 
-      var episodelist = d3.select("episodelist").append("ul");
-      episodelist.selectAll("li")
-        .data(data)
-        .enter()
-        .append("li")
-          .text(function(d){return d.name;})
-      var infos = episodelist.append("ul")
-        .selectAll("li")
-        .data(function(d){return d.links})
-        .enter()
-        .append("li")
-           .text(function(d){return d})
-      episodelist.selectAll("li")
-        .data(listArray[0])
-        .enter()
-        .append("li")
-          .text(function(d){return d.name;})
-          .on("click", expand)
 
 
     
@@ -434,11 +443,6 @@ Programmeer Project Juni 2015
     </div>
 
     <div id="episodelist">
-<!--       <ol>
-        <li>'Noord-Zuid lijn bijna af.' 6 km</li>
-        <li>'Subsidie bezuiningen zwaarder d' 10 km</li>
-        <li>'Ajax op goede weg?' 20 km</li>
-      </ol>  -->
     </div>
 
   </body>

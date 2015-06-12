@@ -11,13 +11,14 @@ html, body, #map-canvas {
   }
 ol {
   font-size: 14px;
+  font-style: white;
 }
-ul {
+/*ul {
   margin: 10px;
   position: relative;
   left: 10px;
   top: 10px;
-}
+}*/
 
 #map-canvas {
   position: absolute;
@@ -32,7 +33,6 @@ ul {
   top: 200px;
   height: 500px;
   width: 300px;
-  font-style: white;
 }
 .intro {
   color: #ff6d00;
