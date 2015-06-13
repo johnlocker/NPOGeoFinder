@@ -54,7 +54,13 @@ Programmeer Project Juni 2015
         // Listen for the event fired when the user selects an item from the
         // pick list. Retrieve the matching places for that item.
         google.maps.event.addListener(searchBox, 'places_changed', function() {
+          
           deleteMarkers()
+          if(!d3.select("#episodelist").select("ul").empty()) {
+            d3.select("#episodelist").select("ul").remove()
+          }
+          
+
           var places = searchBox.getPlaces();
 
           if (places.length == 0) {
@@ -196,24 +202,11 @@ Programmeer Project Juni 2015
 
               var episodelist = d3.select("#episodelist").append("ul");
               episodelist.selectAll("li")
-                  .data(data)
+                  .data(listArray.slice(0, 10))
                   .enter()
                   .append("li")
-                    .text(function(d){return d.name;})
+                    .text(function(d){return d.title;})
                     .on("click", expand)
-
-              // var infos = episodelist.selectAll("li")
-              //     .append("ul")
-              //     .data(function(d){return d.links})
-              //     .enter()
-              //     .append("li")
-              //      .text(function(d){return d})
-              // episodelist.selectAll("li")
-              //   .data(data)
-              //   .enter()
-              //   .append("li")
-              //     .text(function(d){return d.name;})
-              //     .on("click", expand)
               
 
 
@@ -226,7 +219,7 @@ Programmeer Project Juni 2015
             // var arguments = '{"query": "ajax","facets": {"collection": {},"date": {"interval": "day"}},"filters": {"media_content_type": {"terms": ["image/jpeg"]}},"size": 1}';
             // , "filters": {"media_content_type": {"terms": ['video/avi', 'video/mpeg', 'video/quicktime']}}
             // , "sort": "date"
-            arguments = '{"query": "' + place.name + '","size": 100}';
+            arguments = '{"query": "' + place.name + '","size": 100, "sort": "date"}';
             // req.open("GET", url2, true);
             // req.send();
 
@@ -416,14 +409,19 @@ Programmeer Project Juni 2015
     var transDate = d3.time.format("%d-%m-%Y")
 
     function expand(d) {
+      if(d3.select(this).select("ul").empty()) {
       d3.select(this)
-          .on("click", null)
+         // .on("click", null)
         .append("ul")
         .selectAll("li")
-          .data(d.links)
+          .data(d.link)
         .enter().append("li")
           .text(function(d) { return d; });
+      } else {
+        d3.select(this).select("ul").remove()
+      }
     }
+
 
 
 
