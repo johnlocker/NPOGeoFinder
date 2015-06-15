@@ -200,6 +200,9 @@ Programmeer Project Juni 2015
                 
               }
 
+              var ep = document.getElementById("episodelist").style.height 
+              var sub = document.getElementById("sublist9");
+
               var episodelist = d3.select("#episodelist").append("ul").attr("id", "list");
               document.getElementById("list").style.cursor = "pointer";
               episodelist.selectAll("li")
@@ -209,6 +212,7 @@ Programmeer Project Juni 2015
                     .attr("class", function(d){return d.program.toLowerCase();})
                     .text(function(d){return d.title;})
                     .on("click", expand)
+              
               
 
 
@@ -416,15 +420,20 @@ Programmeer Project Juni 2015
         .append("ul")
         .attr("class", "sublist")
         .selectAll("li")
-          .data(d.program)
+          .data([d])
           .enter()
         .append("li")
-          .text(function(d) { return d; });
+          .text(function(d) { return "Date: " + transDate(d.date); })
+        .append("li")
+          .text(function(d) { return 'Link: ' + d.link.substring(d.link.indexOf('//') + 2, d.link.indexOf('.nl') + 3) ; })
+          .on("click", function(d){
+              var newTab = window.open(d.link, '_blank')
+              newTab.focus()
+            })
       } else {
         d3.select(this).select("ul").remove()
       }
     }
-
 
 
 
@@ -441,6 +450,9 @@ Programmeer Project Juni 2015
     </div>
     <div id="introtext" class="intro"> 
       Please enter a location to find NPO Journalistiek items (full episodes or video fragments) associated with the location.
+    </div>
+    <div id="filterdiv" class="intro"> 
+      &darr; Filter
     </div>
 
     <div id="episodelist">

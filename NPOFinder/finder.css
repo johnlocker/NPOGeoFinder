@@ -60,11 +60,12 @@ html, body, #map-canvas {
 }
 .sublist {
   list-style: none;
+  font-weight: bold;
 }
 
 #map-canvas {
   position: absolute;
-  top: 200px;
+  top: 230px;
   left: 100px;
 }
 #episodelist {
@@ -72,30 +73,32 @@ html, body, #map-canvas {
   margin: 10px;
   position: absolute;
   left: 1200px;
-  top: 200px;
+  top: 230px;
   height: 500px;
   width: 300px;
   padding: 10px;
+  overflow: auto;
 }
 .intro {
+  position: absolute;
   color: #ff6d00;
-  margin-left: 10px;
+  margin: 10px;
+  left: 100px;
+  width: 1000px;
+  background-color: black;
+  padding: 10px
+}
+#filterdiv {
+  font-size: 15px;
+  top: 180px;
 }
 #introtext {
-  position: absolute;
   top: 130px;
-  left: 100px;
-  background-color: black;
   height: 20px;
-  width: 1000px;
-  margin: 10px;
-  padding: 10px
-
 }
 #pagetitle {
-  position: absolute;
+  background-color: transparent;
   top: 60px;
-  left: 100px;
   font-size: 40px;
   font-weight: bold;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
