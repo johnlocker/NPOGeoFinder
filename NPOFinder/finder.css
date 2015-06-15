@@ -9,16 +9,58 @@ html, body, #map-canvas {
     margin: 10px;
     padding: 10px
   }
-ol {
-  font-size: 14px;
-  font-style: white;
-}
 /*ul {
   margin: 10px;
   position: relative;
   left: 10px;
   top: 10px;
 }*/
+
+#episodelist .max {
+  list-style-image: url(images/max_logo_very_small.png);
+}
+#episodelist .eo {
+  list-style-image: url(images/eo_logo_very_small.png);
+}
+#episodelist .ntr {
+  list-style-image: url(images/ntr_logo_very_small.png);
+}
+#episodelist .tros {
+  list-style-image: url(images/tros_logo_very_small.png);
+}
+#episodelist .vara {
+  list-style-image: url(images/vara_logo_very_small.png);
+}
+#episodelist .vpro {
+  list-style-image: url(images/vpro_logo_very_small.png);
+}
+#episodelist .ncrv {
+  list-style-image: url(images/ncrv_logo_very_small.png);
+}
+#episodelist .npo_journalistiek {
+  list-style-image: url(images/npo_journalistiek_logo_very_small.png);
+}
+#episodelist .bnn {
+  list-style-image: url(images/bnn_logo_very_small.png);
+}
+#episodelist .kro-ncrv {
+  list-style-image: url(images/kro-ncrv_logo_very_small.png);
+}
+#episodelist .avro {
+  list-style-image: url(images/avro_logo_very_small.png);
+}
+#episodelist .kro {
+  list-style-image: url(images/kro_logo_very_small.png);
+}
+#episodelist .vpro {
+  list-style-image: url(images/vpro_logo_very_small.png);
+}
+#episodelist .nps {
+  list-style-image: url(images/nps_logo_very_small.png);
+}
+.sublist {
+  list-style: none;
+}
 
 #map-canvas {
   position: absolute;
@@ -33,6 +75,7 @@ ol {
   top: 200px;
   height: 500px;
   width: 300px;
+  padding: 10px;
 }
 .intro {
   color: #ff6d00;

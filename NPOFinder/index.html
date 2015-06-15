@@ -20,6 +20,8 @@ Programmeer Project Juni 2015
       var resp = null;
       var markers = [];
       var listArray = [];
+      var markerArray = [];
+
 
 
 
@@ -55,7 +57,15 @@ Programmeer Project Juni 2015
         // pick list. Retrieve the matching places for that item.
         google.maps.event.addListener(searchBox, 'places_changed', function() {
           
+
           deleteMarkers()
+
+          console.log('Markers')
+          console.log(markers)
+          console.log('Markersarra')
+          console.log(markerArray)
+
+
           if(!d3.select("#episodelist").select("ul").empty()) {
             d3.select("#episodelist").select("ul").remove()
           }
@@ -136,7 +146,6 @@ Programmeer Project Juni 2015
 
               console.log("Number hits")
               console.log(hits.length)
-              var markerArray = [];
               var program = null;
               listArray = []
               for (var i = 0; i < hits.length; i++) {
@@ -191,20 +200,13 @@ Programmeer Project Juni 2015
                 
               }
 
-
-              var data = [
-                    {"name":"npo", "links":["npo.nl", "nos.nl"]}, 
-                    {"name":"ajax", "links":["ajax.nl", "eredivisie.nl", "f"]}
-                         ]
-
-              console.log('data print')
-              console.log(data)
-
-              var episodelist = d3.select("#episodelist").append("ul");
+              var episodelist = d3.select("#episodelist").append("ul").attr("id", "list");
+              document.getElementById("list").style.cursor = "pointer";
               episodelist.selectAll("li")
                   .data(listArray.slice(0, 10))
                   .enter()
                   .append("li")
+                    .attr("class", function(d){return d.program.toLowerCase();})
                     .text(function(d){return d.title;})
                     .on("click", expand)
               
@@ -281,8 +283,11 @@ Programmeer Project Juni 2015
 
       // Sets the map on all markers in the array.
       function setAllMap(map) {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
+        if(markers.length > 0) {
+          markers[0].setMap(map);
+        }
+        for (var i = 0; i < markerArray.length; i++) {          
+          markerArray[i].setMap(map);
         }
       }
 
@@ -293,14 +298,10 @@ Programmeer Project Juni 2015
 
       // Deletes all markers in the array by removing references to them.
       function deleteMarkers() {
-        clearMarkers();
         markers = [];
+        markerArray = [];
+        clearMarkers();
       }
-
-      function placeList(list, item) {
-
-      }
-
 
 
       function placeMarker(map, item) {
@@ -308,7 +309,7 @@ Programmeer Project Juni 2015
 
         var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
                             'max', 'ncrv', 'tros', 'vara',
-                            'vpro']
+                            'vpro', 'ntr', 'eo']
 
         if (programArray.indexOf(item.program.toLowerCase()) > -1) {
           var icon = 'images/' + item.program.toLowerCase() + '_logo_small.png'
@@ -329,7 +330,8 @@ Programmeer Project Juni 2015
             '<p><b>Title: </b>' + item.title + '<br>' +
             '<b>Date: </b>' + transDate(item.date) + '<br>' +
             '<b>Link: </b> <a href="' + item.link +'" target="_blank">'+
-            item.link.substring(item.link.indexOf('//') + 2, item.link.indexOf('.nl') + 3) + '</a> <br> <br>' +
+            item.link.substring(item.link.indexOf('//') + 2, item.link.indexOf('.nl') + 3) + '</a>' + '<br>' +
+            '<b>Distance to Search Marker: </b>' + item.distance + ' km <br> <br>' +
              '<b> Description: </b> <br>' + item.description.substring(item.description.indexOf('<p>'), item.description.indexOf('</p>')) + 
             '</p>'+
             '</div>'+
@@ -372,11 +374,10 @@ Programmeer Project Juni 2015
                                  locationMarker[1],
                                  latitude,
                                  longitude);
-        this.list =  this.title + ' ' + this.distance.toString() + ' km' ;
         if (program != null) {
           this.program = program;
         } else {
-          this.program = 'NPO Journalstiek'
+          this.program = 'npo_journalistiek'
         }
         
       }
@@ -413,9 +414,11 @@ Programmeer Project Juni 2015
       d3.select(this)
          // .on("click", null)
         .append("ul")
+        .attr("class", "sublist")
         .selectAll("li")
-          .data(d.link)
-        .enter().append("li")
+          .data(d.program)
+          .enter()
+        .append("li")
           .text(function(d) { return d; });
       } else {
         d3.select(this).select("ul").remove()
