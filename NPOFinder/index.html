@@ -14,6 +14,7 @@ Programmeer Project Juni 2015
   <body>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
     <script src="d3.js"></script>
+    <script src="d3.slider.js"></script>
     
     <script>
       // Constants
@@ -21,6 +22,9 @@ Programmeer Project Juni 2015
       var markers = [];
       var listArray = [];
       var markerArray = [];
+      var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
+                          'max', 'ncrv', 'tros', 'vara',
+                          'vpro', 'ntr', 'eo']
 
 
 
@@ -146,6 +150,8 @@ Programmeer Project Juni 2015
 
               console.log("Number hits")
               console.log(hits.length)
+              console.log("Hit")
+              console.log(hits[0])
               var program = null;
               listArray = []
               for (var i = 0; i < hits.length; i++) {
@@ -188,23 +194,31 @@ Programmeer Project Juni 2015
                   listArray.push(item)
                 }
               }
-              console.log('marker Length')
-              console.log(markerArray.length)
-              console.log('list Length')
-              console.log(listArray.length)
+
+
+              d3.select("#resulttext").remove()
+
+              d3.select('#results')
+                  .style('opacity', '1')
+                  .append('div').style('color', '#3c3c3c')
+                    .attr('id', 'resulttext')
+                    .text("Keyword: " 
+                      + markerName
+                      + '   -   '
+                      + markerArray.length 
+                      + ' locations - ' 
+                      + listArray.length 
+                      + " none locations (list)")
 
               if (markerArray.length > 0) {
                 for (var i = 0; i < markerArray.length; i++) {
                   placeMarker(map, markerArray[i])
                 }
-                
               }
-
-              var ep = document.getElementById("episodelist").style.height 
-              var sub = document.getElementById("sublist9");
 
               var episodelist = d3.select("#episodelist").append("ul").attr("id", "list");
               document.getElementById("list").style.cursor = "pointer";
+              document.getElementById("filterdiv").style.cursor = "pointer";
               episodelist.selectAll("li")
                   .data(listArray.slice(0, 10))
                   .enter()
@@ -212,13 +226,41 @@ Programmeer Project Juni 2015
                     .attr("class", function(d){return d.program.toLowerCase();})
                     .text(function(d){return d.title;})
                     .on("click", expand)
+
               
-              
+              var filters = d3.select('#filterdiv').on('click', function() {
+                if(d3.select("#filtertoggle").style('opacity') == 0) {
+                  d3.select('#map-canvas').style('top', '320px')
+                  d3.select("#results").style('top', '850px')
+                  d3.select("#arrow-right").attr('id', 'arrow-down')
+                  d3.select("#filtertoggle").style('opacity', '1')
+                      .style("height", "100px")
+                  d3.select('.programfilter').selectAll("div")
+                    .data(programArray)
+                    .enter()
+                    .append('div')
+                        .attr('class', "inlinediv")
+                        .style("background", function(d){return "url(images/" + d + "_logo_very_small.png) no-repeat center center";})
+                            .append("div").style("width", "80px").style("display", "inline-block").style("position", "relative")
+                                .append("div").style("display", "inline-block").style("position", "relative").attr("id", "placeholderdiv")
+                                  .append('input')
+                                    .attr('class', 'programbox')
+                                    .attr('type', 'checkbox')
+                                    .attr('checked', 'yes')
+                 } else {
+                  d3.select('#map-canvas').style('top', '230px')
+                  d3.select("#results").style('top', '760px')
+                  d3.select('#arrow-down').attr('id', 'arrow-right')
+                  d3.select("#filtertoggle").style('opacity', '0')
+                 }
+              })
+    
+
+
 
 
 
             }
-
             req.onreadystatechange()
 
 
@@ -311,9 +353,7 @@ Programmeer Project Juni 2015
       function placeMarker(map, item) {
         var googleLatLng = new google.maps.LatLng(item.locationLat, item.locationLong);
 
-        var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
-                            'max', 'ncrv', 'tros', 'vara',
-                            'vpro', 'ntr', 'eo']
+
 
         if (programArray.indexOf(item.program.toLowerCase()) > -1) {
           var icon = 'images/' + item.program.toLowerCase() + '_logo_small.png'
@@ -325,7 +365,9 @@ Programmeer Project Juni 2015
                   position: googleLatLng,
                   map: map,
                   icon: icon,
-                  id: item.id
+                  id: item.id,
+                  draggable: true
+
         });
         var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
@@ -435,6 +477,16 @@ Programmeer Project Juni 2015
       }
     }
 
+    // function drawResults(markerArray, listArray) {
+    //   if(d3.select('#results').empty) {
+
+    //   } else {
+    //     d3.select('#results').remove('#resulttext')
+    //   }
+    // }
+
+
+
 
 
 
@@ -452,12 +504,27 @@ Programmeer Project Juni 2015
       Please enter a location to find NPO Journalistiek items (full episodes or video fragments) associated with the location.
     </div>
     <div id="filterdiv" class="intro"> 
-      &darr; Filter
+    <div id = 'arrowdiv'>
+      <div id = "arrow-right" class="arrow"></div>
+      </div>
+      <div id = 'filtertext'> Filter </div>
+    </div>
+    <div id = 'filtertoggle' class = 'intro'>
+      <div class = "programfilter">
+        Programs: 
+      </div>
     </div>
 
     <div id="episodelist">
     </div>
 
+    <div id = "results" class = 'intro'>
+        
+    </div>
   </body>
 </html>
 
+
+<!-- <img src="images/ncrv_logo_very_small.png" alt="NCRV"> -->
+
+<!-- <div id = 'imageProgram1'> </div>  <div class = 'inlinediv'> <input id = 'program1' class = 'programbox' type = 'checkbox' checked = ''/> </div> -->
