@@ -8,6 +8,7 @@ Programmeer Project Juni 2015
   <head>
       <title>NPO Geo Finder</title>
       <link rel="stylesheet" type="text/css" href="finder.css"/>
+      <link rel="stylesheet" type="text/css" href="mb.slider.css"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
   </head>
@@ -25,8 +26,10 @@ Programmeer Project Juni 2015
       var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
                           'max', 'ncrv', 'tros', 'vara',
                           'vpro', 'ntr', 'eo']
+      var dates;
 
-
+      var recVal;
+      var from;
 
 
       function initialize() {
@@ -256,8 +259,176 @@ Programmeer Project Juni 2015
               })
     
 
+            
+              var margin = {top: 5, right: 50, bottom: 200, left: 250},
+                  width = 500,
+                  height = 60;
 
 
+            dates = getDates(parseDate2("01-01-2010"), new Date())
+
+            var x = d3.scale.linear()
+                .domain([0, dates.length])
+                .range([0, width]);
+
+            var y = d3.random.normal(height / 2, height / 8);
+
+            var brush = d3.svg.brush()
+                .x(x)
+                .extent([0, dates.length])
+                .on("brushstart", brushstart)
+                .on("brush", brushmove)
+                .on("brushend", brushend);
+
+            var arc = d3.svg.arc()
+                .outerRadius(height / 2)
+                .startAngle(0)
+                .endAngle(function(d, i) { return i ? -Math.PI : Math.PI; });
+
+            var svg = d3.select("#filtertoggle").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.svg.axis().scale(x).orient("bottom"));
+
+            var line = svg.append('g').append("line")
+                          .attr("x1", 0)
+                          .attr("y1", height / 2)
+                          .attr("x2", width)
+                          .attr("y2", height / 2)
+                          .attr("stroke-width", 2) 
+                          .attr("stroke", "white");
+
+            // var circle = svg.append("g").selectAll("circle")
+            //     .data(data)
+            //   .enter().append("circle")
+            //     .attr("transform", function(d) { return "translate(" + x(d) + "," + y() + ")"; })
+            //     .attr("r", 3.5);
+
+            var brushg = svg.append("g")
+                .attr("class", "brush")
+                .call(brush);
+
+            brushg.selectAll(".resize").append("path")
+                .attr("transform", "translate(0," +  height / 2 + ")")
+                .attr("d", arc);
+
+            brushg.selectAll("rect")
+                .attr("height", height);
+
+            brushstart();
+            brushmove();
+
+            function brushstart() {
+              svg.classed("selecting", true);
+            }
+
+            function brushmove() {
+              var s = brush.extent();
+              console.log('s')
+              console.log(s)
+              console.log('From')
+              console.log(dates[Math.round(s[0])])
+              console.log('To')
+              console.log(dates[Math.round(s[1] - 1)])
+            }
+
+            function brushend() {
+              svg.classed("selecting", !d3.event.target.empty());
+            }
+
+//               var x = d3.scale.linear()
+//                   .domain([0, 100])
+//                   .range([0, 500])
+//                   .clamp(true);
+
+//               var brush = d3.svg.brush()
+//                   .x(x)
+//                   .extent([0, 0])
+//                   .on("brush", brushed);
+
+
+//               var svg = d3.select("#filtertoggle").append("svg")
+//                   .attr("width", width)
+//                   .attr("height", height)
+//                     .append("g")
+//                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//             svg.append('g')
+//                 .attr('class', 'filtertext')
+//               .attr("transform", "translate(0," + height / 2 + ")")
+//               .text('Dates:')
+
+// // <text x="20" y="20" font-family="sans-serif" font-size="20px" fill="red">Hello!</text>
+
+
+//               svg.append("g")
+//                 .attr("class", "x axis")
+//                 .attr("transform", "translate(0," + height / 2 + ")")
+//                 .call(d3.svg.axis()
+//                   .scale(x)
+//                   .tickFormat(function(d) { return d + "°"; })
+//                   .tickSize(0)
+//                   .tickPadding(12))
+//               .select(".domain")
+//               .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+//                 .attr("class", "halo");
+
+//               var slider = svg.append("g")
+//                   .attr("class", "slider")
+//                   .call(brush);
+
+//               slider.selectAll(".extent,.resize")
+//                   .remove();
+
+//               slider.select(".background")
+//                   .attr("height", height)
+
+//               var handle1 = slider.append("circle")
+//                   .attr("class", "handle")
+//                   .attr("transform", "translate(0," + height / 2 + ")")
+//                   .attr("r", 9)
+
+
+//               var handle2 = slider.append("circle")
+//                   .attr("class", "handle")
+//                   .attr("transform", "translate(0," + height / 2 + ")")
+//                   .attr("r", 9)
+
+//               slider
+//                   .call(brush.event)
+//                 .transition() // gratuitous intro!
+//                   .duration(750)
+//                   .call(brush.extent([70, 70]))
+//                   .call(brush.event);
+
+//               function brushed() {
+//                 var value1 = brush.extent()[0];
+//                 var value2 = brush.extent()[0];
+
+//                 if (d3.event.sourceEvent) { // not a programmatic event
+//                   value1 = x.invert(d3.mouse(this)[0]);
+//                   value2 = x.invert(d3.mouse(this)[0]);
+//                   brush.extent([value1, value1]);
+//                   brush.extent([value2, value2]);
+//                 }
+
+//                 handle1.attr("cx", x(value1));
+//                 handle2.attr('cx', x(value2))
+
+//                 console.log('Handle1')
+//                 console.log(value1)
+
+
+//                 console.log('Handle2')
+//                 console.log(value2)
+//               }
 
 
             }
@@ -453,6 +624,7 @@ Programmeer Project Juni 2015
       return dist
     }
     var parseDate = d3.time.format("%Y-%m-%d %X").parse
+    var parseDate2 = d3.time.format("%d-%m-%Y").parse
     var transDate = d3.time.format("%d-%m-%Y")
 
     function expand(d) {
@@ -486,8 +658,24 @@ Programmeer Project Juni 2015
     // }
 
 
+    // retrieved from http://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
 
 
+    Date.prototype.addDays = function(days) {
+        var dat = new Date(this.valueOf())
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    }
+
+    function getDates(startDate, stopDate) {
+        var dateArray = new Array();
+        var currentDate = startDate;
+        while (currentDate <= stopDate) {
+            dateArray.push( new Date (currentDate) )
+            currentDate = currentDate.addDays(1);
+        }
+        return dateArray;
+    }
 
 
     
