@@ -66,3 +66,8 @@ circle {
   shape-rendering: crispEdges;
 }
 
+.slidertext {
+  fill: white;
+  font-size: 16px;
+  margin-left: 10px;
+}
