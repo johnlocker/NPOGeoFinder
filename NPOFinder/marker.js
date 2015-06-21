@@ -41,6 +41,7 @@ function placeMarker(map, item) {
 	          draggable: true
 
 	})
+
 	markers.push(marker);
 
 	// Adding info window functionality
