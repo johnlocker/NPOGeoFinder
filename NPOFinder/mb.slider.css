@@ -31,11 +31,9 @@
   height: 50px;
 }
 
-
 svg {
   font: 10px sans-serif;
 }
-
 circle {
   -webkit-transition: fill-opacity 250ms linear;
 }

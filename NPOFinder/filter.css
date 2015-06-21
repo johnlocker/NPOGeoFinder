@@ -1,0 +1,10 @@
+/*
+    Jonathan Klaiber
+    Programming Project 2015
+
+    CSS corresponding to filter functionality in fiter.js
+*/
+
+#filterdiv {
+	cursor: pointer;
+}
