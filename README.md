@@ -3,7 +3,8 @@
 
 Student: Jonathan Klaiber <br>
 Student number: 10004077
-
+Public domain: 
+Copyright notice: 
 
 ### Application Goals
 

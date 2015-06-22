@@ -22,6 +22,7 @@ Programmeer Project Juni 2015
     <script src="marker.js"></script>
     <script src="filter.js"></script>
     <script src="resultbar.js"></script>
+    <script src="apicommunication.js"></script>
     <script>
       // Constants
       var resp = null;
@@ -37,7 +38,6 @@ Programmeer Project Juni 2015
       function initialize() {
 
         // Constants
-        // var boundsScaling = 0.00028;
 
         LoadFilter()
 
@@ -100,14 +100,8 @@ Programmeer Project Juni 2015
               position: place.geometry.location
             });
             markers.push(marker);
-
-
             bounds.extend(place.geometry.location);
-       
-            // bounds.za.A = bounds.za.A * (1 + boundsScaling);
-            // bounds.za.j = bounds.za.j * (1 - boundsScaling);
-            // bounds.qa.A = bounds.qa.A * (1 + boundsScaling);
-            // bounds.qa.j = bounds.qa.j * (1 - boundsScaling);
+      
 
             var req = createRequest();
 
@@ -153,13 +147,6 @@ Programmeer Project Juni 2015
               for (var i = 0; i < hits.length; i++) {
                 var program = "npo_journalistiek";
 
-                if(i < 20) {
-                  console.log('i:')
-                  console.log(i)
-                }
-
-
-                hits[i]._source.Broadcasters
 
                 if(hits[i]._source.Broadcasters != null) {
                     program = hits[i]._source.Broadcasters[0].Name
@@ -187,6 +174,9 @@ Programmeer Project Juni 2015
                 // console.log(checkProgram)
                 
                 if(hits[i]._source.Locations != null) {
+
+                  console.log("hits[i]")
+                  console.log(hits[i])
 
                   var item = new ItemMarker(hits[i]._source.Id,
                                             hits[i]._source.Title,
@@ -273,27 +263,6 @@ Programmeer Project Juni 2015
       }
 
       google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
-      function createRequest() {
-        var result = null;
-        if (window.XMLHttpRequest) {
-          // FireFox, Safari, etc.
-          result = new XMLHttpRequest();
-          if (typeof result.overrideMimeType != 'undefined') {
-            result.overrideMimeType('text/xml'); // Or anything else
-          }
-        }
-        else if (window.ActiveXObject) {
-          // MSIE
-          result = new ActiveXObject("Microsoft.XMLHTTP");
-        } 
-        else {
-          // No known mechanism -- consider aborting the application
-        }
-        return result;
-      }
 
 
 
