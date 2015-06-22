@@ -9,7 +9,7 @@
 
 
 var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
-                  'max', 'ncrv', 'nos', 'tros',
+                  'max', 'ncrv', 'nos', 'nps', 'tros',
                   'vara', 'vpro', 'ntr', 'eo']
 
 
@@ -26,13 +26,34 @@ var brush;
 var fromDate;
 var toDate;
 var x;
-var dates;
-var from = parseBeginDate("01-01-2005")
+var dates 
+var beginDate = "01-01-2000"
+var from = parseBeginDate(beginDate)
+
 var to = new Date();
+to.setDate(to.getDate() - 1);
+// var to = new Date();
+
+var programChecked = {avro: true, 
+                      bnn: true, 
+                      kro: true, 
+                      kroncrv: true, 
+                      max: true, 
+                      ncrv: true,
+                      nps: true,
+                      nos: true, 
+                      tros: true,
+                      vara: true, 
+                      vpro: true, 
+                      ntr: true, 
+                      eo: true};
+
+
 
 
 function LoadFilter () {
 	d3.select('#filterdiv').on('click', function() {
+
 	    if(d3.select("#filtertoggle").empty()) {
 	    	// Initialising filtertoggle div
 	        d3.select('body')
@@ -57,7 +78,7 @@ function LoadFilter () {
 		d3.select("#arrow-right").attr('id', 'arrow-down')
 
 		// Initialising program checkboxes
-        d3.select('.programfilter')
+       var programfilter = d3.select('.programfilter')
         	.append('div').attr('class', 'slidertext')
           	.text('Programs:  ')
         	.selectAll("div")
@@ -76,19 +97,59 @@ function LoadFilter () {
 	                       .style("display", "inline-block")
 	                       .style("position", "relative")
 	                       .attr("id", "placeholderdiv")
-                         .style('width', "30px")
-	                        .append('input')
+                         .style('width', "20px")
+	                       .append('input')
 	                          .attr('class', 'programbox')
+                            .attr('id', function(d) {
+                              return d + 'Box'
+                            })
 	                          .attr('type', 'checkbox')
 	                          .attr('checked', 'yes')
 
+    
+        // show the current filter values, checked or unchecked
+        for (var prog in programChecked) {
+            progA = prog
+            if(prog == 'kroncrv') {
+              progA = 'kro-ncrv'
+            } else {
+              progA = prog
+            }
+            console.log('prog')
+            console.log(prog)
+            console.log('ProgA')
+            console.log(progA)
+            document.getElementById(progA + 'Box').checked = programChecked[prog]
+        }
 
-            dates = getDates(from, to)
 
-            // console.log('from')
-            // console.log(from)
-            console.log('print dates')
-            console.log(dates)
+        // change checkbox values at change
+        d3.selectAll(".programbox").on("change", function() {
+          prog = this.id.substring(0, this.id.length - 3)
+          if(prog == 'kro-ncrv') {
+            prog = 'kroncrv'
+          }
+          programChecked[prog] = document.getElementById(this.id).checked
+        });
+
+
+
+            dates = getDates(parseBeginDate(beginDate), new Date())
+
+            dates = dates.slice(1, dates.length)
+
+            console.log('length dates')
+
+            console.log(dates.length)
+
+            console.log('nextDate')
+            console.log(nextDate( to, dates ) )
+
+
+
+            console.log('dates.indexOf(to)')
+            console.log(dates.indexOf(nextDate( to, dates ) ))
+
 
             var x = d3.scale.linear()
                 .domain([0, dates.length])
@@ -98,7 +159,7 @@ function LoadFilter () {
 
             brush = d3.svg.brush()
                 .x(x)
-                .extent([0, dates.length])
+                .extent([dates.indexOf(nextDate(from, dates)), dates.indexOf(nextDate(to, dates))])
                 .on("brushstart", brushstart)
                 .on("brush", brushmove)
                 .on("brushend", brushend);
@@ -189,6 +250,21 @@ function LoadFilter () {
 		function brushend() {
 		  svg.classed("selecting", !d3.event.target.empty());
 		}
+    function nextDate( startDate, dates ) {
+      var startTime = +startDate;
+      var nearestDate, nearestDiff = Infinity;
+      for( var i = 0, n = dates.length;  i < n;  ++i ) {
+          var diff = +dates[i] - startTime;
+          if( diff > 0  &&  diff < nearestDiff ) {
+              nearestDiff = diff;
+              nearestDate = dates[i];
+          }
+      }
+      // if(nearestDate == null) {
+      //   nearestDate = dates[dates.length - 1]
+      // }
+      return nearestDate;
+    }
 
  	})
 }
