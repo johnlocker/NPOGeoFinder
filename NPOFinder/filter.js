@@ -11,10 +11,9 @@
 */
 "use strict";
 
-
-var programArray = ['avro', 'bnn', 'kro', 'kro-ncrv',
-                  'max', 'ncrv', 'nos', 'nps', 'tros',
-                  'vara', 'vpro', 'ntr', 'eo']
+var programArray = ["avro", "bnn", "kro", "kro-ncrv",
+                  "max", "ncrv", "nos", "nps", "tros",
+                  "vara", "vpro", "ntr", "eo"]
 
 
 var margin = {top: 20, right: 50, bottom: 200, left: 250},
@@ -57,78 +56,78 @@ var programChecked = {avro: true,
 
 
 function LoadFilter () {
-	d3.select('#filterdiv').on('click', function() {
+	d3.select("#filterdiv").on("click", function() {
 
     if(d3.select("#filtertoggle").empty()) {
     	// Initialising filtertoggle div
-        d3.select('body')
-        	.append('div')
-            	.attr('class', 'intro')
-            	.attr('id', "filtertoggle")
-            	.append('div')
-            		.attr('class', 'programfilter');
+        d3.select("body")
+        	.append("div")
+            	.attr("class", "intro")
+            	.attr("id", "filtertoggle")
+            	.append("div")
+            		.attr("class", "programfilter");
 
       // moving map canvas and result bar at click
-      var orgMapTop = d3.select('#map-canvas').style('top')
-      d3.select('#map-canvas').style('top', 
-      	transPixel(d3.select('#map-canvas').style('top')) +
-  		transPixel(d3.select('#filtertoggle').style('height')) + 'px')
+      var orgMapTop = d3.select("#map-canvas").style("top")
+      d3.select("#map-canvas").style("top", 
+      	transPixel(d3.select("#map-canvas").style("top")) +
+  		transPixel(d3.select("#filtertoggle").style("height")) + "px")
 
-      var orgResultTop = d3.select('#results').style('top')
-      d3.select("#results").style('top', 
-      	transPixel(d3.select('#results').style('top')) +
-      	transPixel(d3.select('#filtertoggle').style('height')) + 'px')
+      var orgResultTop = d3.select("#results").style("top")
+      d3.select("#results").style("top", 
+      	transPixel(d3.select("#results").style("top")) +
+      	transPixel(d3.select("#filtertoggle").style("height")) + "px")
         
       // adusting filter arrow	
-		  d3.select("#arrow-right").attr('id', 'arrow-down')
+		  d3.select("#arrow-right").attr("id", "arrow-down")
 
   		// Initialising program checkboxes
-      var programfilter = d3.select('.programfilter')
-      	.append('div').attr('class', 'slidertext')
-        	.text('Programs:  ')
+      var programfilter = d3.select(".programfilter")
+      	.append("div").attr("class", "slidertext")
+        	.text("Programs:  ")
       	.selectAll("div")
           .data(programArray)
           .enter()
-          .append('div')
-              .attr('class', "inlinediv")
+          .append("div")
+              .attr("class", "inlinediv")
               .style("background", function(d){
               	return ("url(images/" + d + 
               		    "_logo_very_small.png) no-repeat center center");})
                   .append("div")
-                    .style("width", placehoderWidth + 'px')
+                    .style("width", placehoderWidth + "px")
                     .style("display", "inline-block")
                     .style("position", "relative")
                       .append("div")
                        .style("display", "inline-block")
                        .style("position", "relative")
                        .attr("id", "placeholderdiv")
-                       .style('width', "20px")
-                       .append('input')
-                          .attr('class', 'programbox')
-                          .attr('id', function(d) {
-                          return d + 'Box'
+                       .style("width", "20px")
+                       .append("input")
+                          .attr("class", "programbox")
+                          .attr("id", function(d) {
+                          return d + "Box"
                           })
-                          .attr('type', 'checkbox')
-                          .attr('checked', 'yes')
+                          .attr("type", "checkbox")
+                          .attr("checked", "yes")
 
     
       // show the current filter values, checked or unchecked
       for (var prog in programChecked) {
           var progA;
-          if(prog == 'kroncrv') {
-            progA = 'kro-ncrv'
+          if(prog == "kroncrv") {
+            progA = "kro-ncrv"
           } else {
             progA = prog
           }
-          document.getElementById(progA + 'Box').checked = programChecked[prog]
+          document.getElementById(progA + "Box").checked = programChecked[prog]
       }
 
 
       // change checkbox values at change
       d3.selectAll(".programbox").on("change", function() {
         prog = this.id.substring(0, this.id.length - 3)
-        if(prog == 'kro-ncrv') {
-          prog = 'kroncrv'
+        if(prog == "kro-ncrv") {
+          prog = "kroncrv"
         }
         programChecked[prog] = document.getElementById(this.id).checked
       });
@@ -138,16 +137,16 @@ function LoadFilter () {
       dates = getDates(parseBeginDate(beginDate), new Date())
       // dates = dates.slice(1, dates.length)
 
-      console.log('length dates')
+      console.log("length dates")
 
       console.log(dates.length)
 
-      console.log('nextDate')
+      console.log("nextDate")
       console.log(nextDate(to, dates))
 
 
 
-      console.log('from')
+      console.log("from")
       console.log(from)
 
 
@@ -171,9 +170,9 @@ function LoadFilter () {
           .endAngle(function(d, i) { return i ? -Math.PI : Math.PI; });
 
       svg = d3.select("#filtertoggle").append("svg")
-          .attr('width', '1000')
-          .attr('height', '80')
-          .attr('id', 'dateSVG')
+          .attr("width", "1000")
+          .attr("height", "80")
+          .attr("id", "dateSVG")
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -183,7 +182,7 @@ function LoadFilter () {
           .attr("transform", "translate(0," + height + ")")
           .call(d3.svg.axis().scale(x).orient("bottom"));
 
-      var line = svg.append('g').append("line")
+      var line = svg.append("g").append("line")
                     .attr("x1", 0)
                     .attr("y1", height / 2)
                     .attr("x2", width)
@@ -195,14 +194,14 @@ function LoadFilter () {
 
       var dateLabel = svg.append("text")
                          .attr("class", "slidertext")
-                         .attr('x', - margin.left + marginFilterLabel)
-                         .attr('y', height / 2)
-                         .text('Date:')
+                         .attr("x", - margin.left + marginFilterLabel)
+                         .attr("y", height / 2)
+                         .text("Date:")
 
-      fromDate = svg.append('text')
+      fromDate = svg.append("text")
                         .attr("class", "slidertext")
 
-      toDate = svg.append('text')
+      toDate = svg.append("text")
                       .attr("class", "slidertext")
 
       var brushg = svg.append("g")
@@ -224,10 +223,10 @@ function LoadFilter () {
 
     } else {
         d3.select("#dateSVG").remove()
-        d3.select('#filtertoggle').remove()
-        d3.select('#map-canvas').style('top', orgMapTop)
-        d3.select("#results").style('top', orgResultTop)
-        d3.select('#arrow-down').attr('id', 'arrow-right')
+        d3.select("#filtertoggle").remove()
+        d3.select("#map-canvas").style("top", orgMapTop)
+        d3.select("#results").style("top", orgResultTop)
+        d3.select("#arrow-down").attr("id", "arrow-right")
     }
         
 
@@ -235,41 +234,29 @@ function LoadFilter () {
 			svg.classed("selecting", true);
 		}
 		function brushmove() {
+      // Callback for movement of brush
 		  s = brush.extent();
-
-      console.log('s[0]')
-      console.log(s[0])
-
-		  from = dates[Math.round(s[0])]
-		  to = dates[Math.round(s[1] - 1)]
-
-		  fromDate.attr("x", x(s[0]) - 140)
-		          .attr('y', height * 0.1)
-		          .text('from: ' + transDate(from))
-
+      // Adjust interactivity rectangle to brush width
+      var rectWidth = x(s[1]) - x(s[0])
+      brushg.select(".background")
+            .attr("x", x(s[0]))
+            .attr("width", rectWidth)
+      // Storing date information from date filter
+		  from = dates[Math.round(s[0])];
+		  to = dates[Math.round(s[1] - 1)];
+		  fromDate.attr("x", x(s[0] ) - 140)
+		          .attr("y", height * 0.1)		          
+              .text("from: " + transDate(from));
 		  toDate.attr("x", x(s[1]) + 30) 
-		          .attr('y', height * 0.1)
-		          .text('to: ' + transDate(to))
+		          .attr("y", height * 0.1)
+		          .text("to: " + transDate(to));
 		}
 		function brushend() {
 		  svg.classed("selecting", !d3.event.target.empty());
 		}
-    function nextDate( startDate, dates ) {
-      var startTime = +startDate;
-      var nearestDate, nearestDiff = Infinity;
-      for( var i = 0, n = dates.length;  i < n;  ++i ) {
-          var diff = +dates[i] - startTime;
-          if( diff > 0  &&  diff < nearestDiff ) {
-              nearestDiff = diff;
-              nearestDate = dates[i];
-          }
-      }
-      return nearestDate;
-    }
-
  	})
-}
-
+};
 function transPixel(charPixel) {
-	return parseInt(charPixel.substring(0, charPixel.length - 2))
+  // Transforms pixel string ("100px") into integer
+	return parseInt(charPixel.substring(0, charPixel.length - 2));
 }

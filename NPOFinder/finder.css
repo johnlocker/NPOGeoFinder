@@ -1,32 +1,21 @@
+/*
+    Jonathan Klaiber
+    Programming Project 2015
+
+    CSS corresponding to general styling of index.html
+*/
 body {
   background-image: url("images/npo_background.jpg");
   font-family: arial;
 }
 
-html, body, #map-canvas {
+html, body {
     height: 500px;
     width: 1000px;
     margin: 10px;
     padding: 10px
   }
-#imageProgram1{
-  background: url(images/avro_logo_very_small.png) no-repeat center center;
-  width: 22px;
-  height: 22px;
-  display: inline-block;
-  position: relative;
-  top: 6px;
-}
-#map-canvas {
-  position: absolute;
-  top: 230px;
-  left: 100px;
-}
-.inlinediv {
-  display: inline-block;
-  position: relative;
-  top: 3px;
-}
+
 .intro {
   position: absolute;
   color: #ff6d00;
@@ -36,16 +25,19 @@ html, body, #map-canvas {
   background-color: black;
   padding: 10px
 }
+
 .arrow {
   display: inline-block;
   width: 0; 
   height: 0; 
 }
+
 .programfilter {
   background: white;
   height: 30px;
   color: black;
 }
+
 #results {
   height: 20px;
   top: 760px;
@@ -54,15 +46,18 @@ html, body, #map-canvas {
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
 #filtertext {
   display: inline-block;
   position: relative;
   left: 5px;
 }
+
 #arrowdiv {
   display: inline-block;
   width: 10px;
 }
+
 #filtertoggle {
   height: 100px;
   position: absolute;
@@ -71,24 +66,29 @@ html, body, #map-canvas {
   padding: 0;
   top: 220px;
 }
+
 #arrow-right {
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
   border-left: 7px solid #ff6d00;
 }
+
 #arrow-down {
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
   border-top: 7px solid #ff6d00;
 }
+
 #filterdiv {
   font-size: 15px;
   top: 180px;
 }
+
 #introtext {
   top: 130px;
   height: 20px;
 }
+
 #pagetitle {
   background-color: transparent;
   top: 60px;
@@ -96,43 +96,4 @@ html, body, #map-canvas {
   font-weight: bold;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   font-style: italic;
-}
-.controls {
-  margin-top: 16px;
-  border: 1px solid transparent;
-  border-radius: 2px 0 0 2px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  height: 32px;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-#pac-input {
-  background-color: #fff;
-  font-family: Roboto;
-  font-size: 15px;
-  font-weight: 300;
-  margin-left: 12px;
-  padding: 0 11px 0 13px;
-  text-overflow: ellipsis;
-  width: 400px;
-}
-#pac-input:focus {
-  border-color: #4d90fe;
-}
-.pac-container {
-  font-family: Roboto;
-}
-#type-selector {
-  color: #fff;
-  background-color: #4d90fe;
-  padding: 5px 11px 0px 11px;
-}
-#type-selector label {
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: 300;
-}
-#target {
-  width: 345px;
 }

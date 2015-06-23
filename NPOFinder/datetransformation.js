@@ -42,3 +42,16 @@ function getDates(startDate, stopDate) {
     }
     return dateArray;
 }
+
+function nextDate( startDate, dates ) {
+  var startTime = +startDate;
+  var nearestDate, nearestDiff = Infinity;
+  for( var i = 0, n = dates.length;  i < n;  ++i ) {
+      var diff = +dates[i] - startTime;
+      if( diff > 0  &&  diff < nearestDiff ) {
+          nearestDiff = diff;
+          nearestDate = dates[i];
+      }
+  }
+  return nearestDate;
+}

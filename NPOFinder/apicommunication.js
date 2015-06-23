@@ -5,25 +5,24 @@
 
     This script contains functionality to communicate with an API.
 
-    Partly inspired by 
-
+    The script is adopted from 
+    "http://rest.elkstein.org/2008/02/using-rest-in-javascript.html"
 */
-
 function createRequest() {
 	var result = null;
 	if (window.XMLHttpRequest) {
-	  // FireFox, Safari, etc.
+	  // For FireFox, Safari, etc.
 	  result = new XMLHttpRequest();
 	  if (typeof result.overrideMimeType != 'undefined') {
-	    result.overrideMimeType('text/xml'); // Or anything else
+	    result.overrideMimeType('text/xml'); 
 	  }
 	}
 	else if (window.ActiveXObject) {
-	  // MSIE
+	  // For MS InternetExplorer
 	  result = new ActiveXObject("Microsoft.XMLHTTP");
 	} 
 	else {
-	  // No known mechanism -- consider aborting the application
+		// Else request was not successful
 	}
 	return result;
 }

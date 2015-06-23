@@ -24,7 +24,6 @@ function placeMarker(map, item) {
 	// for markers.
 	var googleLatLng = new google.maps.LatLng(item.locationLat, 
 											  item.locationLong);
-
 	// Getting marker icon
 	if (programArray.indexOf(item.program.toLowerCase()) > -1) {
 	  var icon = 'images/' + item.program.toLowerCase() + '_logo_small.png'
