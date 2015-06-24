@@ -13,9 +13,14 @@
 "use strict";
 
 var LoadEpisodelist = function() {
-	// Function to load list of NPO item without a location
-	// All list entries can be expanded by clicking on them.
-	var episodelist = d3.select("#episodelist").append("ul").attr("id", "list");
+	/*
+	Function to load list of NPO item without a location
+	All list entries can be expanded by clicking on them.
+	*/
+	var episodelist = d3.select("#episodelist")
+						.style("opacity", "1")
+						.append("ul")
+							.attr("id", "list");
 	episodelist.selectAll("li")
 	  .data(listArray.slice(0, 10))
 	  .enter()
@@ -24,29 +29,30 @@ var LoadEpisodelist = function() {
 	    .text(function(d){return d.title;})
 	    .on("click", expand);
 }
-
 function expand(d) {
-  // At click, list entry is expanded and shows date and
-  // url of NPO item.
-  if(d3.select(this).select("ul").empty()) {
-	  d3.select(this)
-	    .append("ul")
-	    .attr("class", "sublist")
-	    .selectAll("li")
-	      .data([d])
-	      .enter()
-	    .append("li")
-	      .text(function(d) { return "Date: " + transDate(d.date);})
-	    .append("li")
-	      .text(function(d) { return ('Link: ' 
-	      							  + d.link.substring(d.link.indexOf('//') 
-	      							  + 2, d.link.indexOf('.nl') + 3)) ; })
-	      .on("click", function(d){
-	          var newTab = window.open(d.link, '_blank')
-	          newTab.focus()
-	          
-	        })
-  } else {
-    d3.select(this).select("ul").remove()
-  }
+    /*
+    At click, list entry is expanded and shows date and
+    url of NPO item.
+    */
+    if(d3.select(this).select("ul").empty()) {
+	    d3.select(this)
+		    .append("ul")
+			    .attr("class", "sublist")
+			    .selectAll("li")
+			      .data([d])
+			      .enter()
+			    .append("li")
+			      .text(function(d) { return "Date: " 
+			      							 + transDate(d.date);})
+			    .append("li")
+			      .text(function(d) { return ("Link: " 
+			      							  + d.link.substring(d.link.indexOf("//") 
+			      							  + 2, d.link.indexOf(".nl") + 3)) ; })
+			      .on("click", function(d){
+			          var newTab = window.open(d.link, "_blank")
+			          newTab.focus()
+	        });
+    } else {
+    	d3.select(this).select("ul").remove()
+    } 
 }

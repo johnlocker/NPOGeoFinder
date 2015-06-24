@@ -24,6 +24,7 @@ Libraries:
       <link rel="stylesheet" type="text/css" href="filter.css"/>
       <link rel="stylesheet" type="text/css" href="googlemaps.css"/>
       <link rel="stylesheet" type="text/css" href="resultbar.css"/>
+      <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.css"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
   <body>
@@ -45,8 +46,12 @@ Libraries:
       var listArray = [];
       var markerArray = [];
       var hits;
-      // main() function
       function initialize() {
+        /*
+        The main function to load the Google Maps Map
+        and its functionality. The NPO API communication
+        also takes place here in the Google Maps API calllback
+        */
         // Load the filter function
         LoadFilter();
         // Initialise map
@@ -105,9 +110,13 @@ Libraries:
             var markerName = place.name;
             // Create the callback:
             req.onreadystatechange = function() {
-              if (req.readyState != 4) return; 
+              if (req.readyState != 4) {
+                console.log("Warning, readyState is not 4")
+                return; 
+              } 
               if (req.status != 200) {
                 // Request failure handled here
+                console.log("Warning, request status is not 200")
                 return;
               }
               // Resp contains the Query response text
@@ -119,17 +128,12 @@ Libraries:
               markerArray = [];
               for (var i = 0; i < hits.length; i++) {
                 // The default program option is NPO journalistiek 
-                // When an item does not contain program information 
-                // it gets the general NPO Journalistiek tag
                 var program = "npo_journalistiek";
                 // Correct program is attached to NPO item 
                 if(hits[i]._source.Broadcasters != null) {
                     program = hits[i]._source.Broadcasters[0].Name;
                     var checkProgram = program.toLowerCase();
-                    // While the date filter ia applied at the API
-                    // the program filter is applied to the incoming
-                    // data. An NPO item is skipped 
-                    // is the associated program filter checkbox is unchecked
+                    // Program filter is applied on the incoming data
                     if(checkProgram == "kro-ncrv") {
                       checkProgram = "kroncrv";
                     }
@@ -197,6 +201,9 @@ Libraries:
                                  "application/x-www-form-urlencoded");
             // Sending the request
             req.send(query);
+            console.log('query')
+            console.log(query)
+            console.log(req)
           }
           // Adjust searchbox to viewpoint borders
           map.fitBounds(places[0].geometry.viewport);
@@ -211,22 +218,38 @@ Libraries:
       // Loading the map
       google.maps.event.addDomListener(window, "load", initialize);
     </script>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <div id="map-canvas"></div>
-    <div id="pagetitle" class="intro"> 
+    <input id = "pac-input" class = "controls" type = "text" placeholder = "Search Box">
+    <div id = "map-canvas"></div>
+    <div id = "pagetitle" class = "intro"> 
       NPO Geo Finder
     </div>
-    <div id="introtext" class="intro"> 
-      Please enter a location to find NPO Journalistiek items 
-      (full episodes or video fragments) associated with the location.
+    <div id = "introtext" class = "intro">
+      The NPO Geo Finder enables you to obtain NPO Journalistiek items like
+      documentatries or news reports by location.
     </div>
-    <div id="filterdiv" class="intro"> 
+     <div id = "introdescription" class = "intro"> 
+      Please enter a location in the search box on the map.
+      <br>
+      The location you typed in will be used 
+      as keyword to search the NPO Backstage API.
+      You can refine your search
+      by clicking on the "Filter" bar. The filter bar gives you the possiblity
+      to search selectivly for programs and time periods.
+    </div>
+    <div id = "introresults" class = "intro">
+      The search result with a location are depicted on the map. Some search results
+      do not have a location; they are depicted on a white panel at the right.
+      <br>
+      <br>
+      Click on a search result if you want to get more information!
+    </div>
+    <div id = "filterdiv" class = "intro"> 
       <div id = "arrowdiv">
-        <div id = "arrow-right" class="arrow"></div>
+        <div id = "arrow-right" class = "arrow"></div>
       </div>
       <div id = "filtertext"> Filter </div>
     </div>
-    <div id="episodelist"></div>
+    <div id = "episodelist"></div>
     <div id = "results" class = "intro"></div>
   </body>
 </html>

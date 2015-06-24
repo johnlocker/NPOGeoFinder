@@ -9,11 +9,12 @@
   margin: 10px;
   position: absolute;
   left: 1200px;
-  top: 230px;
+  top: 335px;
   height: 500px;
   width: 300px;
   padding: 10px;
   overflow: auto;
+  opacity: 0;
 }
 
 .sublist {

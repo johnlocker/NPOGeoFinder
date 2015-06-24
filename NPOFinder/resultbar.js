@@ -6,23 +6,23 @@
     This script contains functionality of the result bar.
 */
 "use strict";
-
 var DisplayResultBar = function(keyword, markerArray, listArray) {
-  // Displays the search results at the bottom of the map.
-
+  /*
+    Displays the search results at the bottom of the map once
+    a request has been sended.
+  */
   // Remove old results if there are any
   d3.select("#resulttext").remove();
-
   // Display resultstext
-  d3.select('#results')
-      .style('opacity', '1')
-      .append('div').style('color', '#3c3c3c')
-        .attr('id', 'resulttext')
+  d3.select("#results")
+      .style("opacity", "1")
+      .append("div").style("color", "#3c3c3c")
+        .attr("id", "resulttext")
         .text("Keyword: " 
           + keyword
-          + '   -   '
+          + "   -   "
           + markerArray.length 
-          + ' locations - ' 
+          + " locations - " 
           + listArray.length 
           + " none locations (list)");
 }
