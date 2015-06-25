@@ -37,18 +37,23 @@ var brush;
 var fromDate;
 var toDate;
 var x;
-var dates 
 var beginDate = "01-01-2000"
-var from = parseBeginDate(beginDate)
-var s;
+var from = parseBeginDate(beginDate);
 var to = new Date();
 to.setDate(to.getDate() - 1);
+
 
 function LoadFilter () {
   /* 
   Loads filter functionality, the program filter and
   the date brush filter.
   */
+  var dates = getDates(parseBeginDate(beginDate), new Date());
+  var beginExtend;
+  var endExtend;
+  var s = [0, dates.length - 1];
+  var minPeriod = 1;
+
 	d3.select("#filterdiv").on("click", function() {
     if(d3.select("#filtertoggle").empty()) {
     	// Initialising filtertoggle div
@@ -121,23 +126,40 @@ function LoadFilter () {
         programChecked[prog] = document.getElementById(this.id).checked
       });
       // Date brush 
-      dates = getDates(parseBeginDate(beginDate), new Date())
+      
       var x = d3.scale.linear()
-          .domain([0, dates.length])
+          .domain([0, dates.length - 1])
           .range([0, width]);
       var y = d3.random.normal(height / 2, height / 8);
       // Initialise brush
-      brush = d3.svg.brush()
-                    .x(x)
-                    .extent([dates.indexOf(nextDate(from, dates)), 
-                             dates.indexOf(nextDate(to, dates))])
-                    .on("brushstart", brushstart)
-                    .on("brush", brushmove)
-                    .on("brushend", brushend);
+      if(s[0] == s[1]) {
+        if(s[0] == 0){
+          var startBrush = s[0];
+          var endBrush = s[1] + minPeriod;
+        } else {
+          var startBrush = s[0] - minPeriod;
+          var endBrush = s[1];
+        }
+        brush = d3.svg.brush()
+              .x(x)
+              .extent([startBrush, endBrush])
+              .on("brushstart", brushstart)
+              .on("brush", brushmove)
+              .on("brushend", brushend);
+      } else {
+        brush = d3.svg.brush()
+              .x(x)
+              .extent([s[0], s[1]])
+              .on("brushstart", brushstart)
+              .on("brush", brushmove)
+              .on("brushend", brushend);
+      }
+
       // Initialise brush begin and end shape
       var arc = d3.svg.arc()
           .outerRadius(height / 2)
           .startAngle(0)
+          .cornerRadius(height / 1.5)
           .endAngle(function(d, i) { return i ? -Math.PI : Math.PI; });
       // Initialise date svg
       svg = d3.select("#filtertoggle").append("svg")
@@ -149,10 +171,6 @@ function LoadFilter () {
                                                 + "," 
                                                 + margin.top 
                                                 + ")");
-      svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.svg.axis().scale(x).orient("bottom"));
       var line = svg.append("g").append("line")
                     .attr("x1", 0)
                     .attr("y1", height / 2)
@@ -176,6 +194,8 @@ function LoadFilter () {
       brushg.selectAll(".resize").append("path")
             .attr("transform", "translate(0," +  height / 2 + ")")
             .attr("d", arc);
+
+
       brushg.selectAll("rect")
             .attr("height", height);
       brushstart();
@@ -202,11 +222,27 @@ function LoadFilter () {
             .attr("width", rectWidth)
       // Storing date information from date filter
   	  from = dates[Math.round(s[0])];
-  	  to = dates[Math.round(s[1] - 1)];
-  	  fromDate.attr("x", x(s[0] ) - 140)
+  	  to = dates[Math.round(s[1])];
+
+      var sBegin;
+      var sEnd;
+      if (s[0] == s[1]) {
+        if(s[0] == 0) {
+          sBegin = s[0];
+          sEnd = s[1] + minPeriod; 
+        } else {
+          sBegin = s[0] - minPeriod;
+          sEnd = s[1];
+        }
+        brush.extent([sBegin, sEnd])
+      } else {
+        sBegin = s[0];
+        sEnd = s[1];
+      }
+  	  fromDate.attr("x", x(sBegin) - 140)
   	          .attr("y", height * 0.1)		          
               .text("from: " + transDate(from));
-  	  toDate.attr("x", x(s[1]) + 30) 
+  	  toDate.attr("x", x(sEnd) + 30) 
 	          .attr("y", height * 0.1)
 	          .text("to: " + transDate(to));
   	}

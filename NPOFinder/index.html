@@ -16,15 +16,16 @@ Libraries:
   JSON
 -->
 <html lang="en" xml:lang="en">
-  <head>
-      <title>NPO Geo Finder</title>
+  <head
+>      <title>NPO Geo Finder</title>
       <link rel="stylesheet" type="text/css" href="index.css"/>
       <link rel="stylesheet" type="text/css" href="mb.slider.css"/>
       <link rel="stylesheet" type="text/css" href="episodelist.css"/>
       <link rel="stylesheet" type="text/css" href="filter.css"/>
       <link rel="stylesheet" type="text/css" href="googlemaps.css"/>
       <link rel="stylesheet" type="text/css" href="resultbar.css"/>
-      <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.css"/>
+      <link href='http://fonts.googleapis.com/css?family=Roboto:300,400'
+            rel='stylesheet' type='text/css'>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
   <body>
@@ -111,12 +112,10 @@ Libraries:
             // Create the callback:
             req.onreadystatechange = function() {
               if (req.readyState != 4) {
-                console.log("Warning, readyState is not 4")
                 return; 
               } 
               if (req.status != 200) {
                 // Request failure handled here
-                console.log("Warning, request status is not 200")
                 return;
               }
               // Resp contains the Query response text
@@ -171,11 +170,8 @@ Libraries:
                   listArray.push(item);
                 }
               }
-              // Placing NPO item markers on map
-              if (markerArray.length > 1) {
-                for (var i = 0; i < markerArray.length; i++) {
+              for (var i = 0; i < markerArray.length; i++) {
                   placeMarker(map, markerArray[i])
-                }
               }
               // Loading result bar
               DisplayResultBar(markerName, markerArray, listArray);
@@ -201,9 +197,6 @@ Libraries:
                                  "application/x-www-form-urlencoded");
             // Sending the request
             req.send(query);
-            console.log('query')
-            console.log(query)
-            console.log(req)
           }
           // Adjust searchbox to viewpoint borders
           map.fitBounds(places[0].geometry.viewport);
@@ -238,7 +231,7 @@ Libraries:
     </div>
     <div id = "introresults" class = "intro">
       The search result with a location are depicted on the map. Some search results
-      do not have a location; they are depicted on a white panel at the right.
+      do not have a location, they are depicted on a white panel next to the map.
       <br>
       <br>
       Click on a search result if you want to get more information!
