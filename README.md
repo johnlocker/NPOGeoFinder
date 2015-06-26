@@ -23,16 +23,16 @@ The user can search for NPO items based on a location. The general problem that 
 
 **Application Screenshots:**
 
-User interface:
+User interface
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/screenshot_main.png)
 
-The main interaction window, the map:
+The main interaction window, the map
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/map.png
 
-The episode list with items that have no location information:
+The episode list with items that have no location information
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/episodelist.png
 
-The filter function:
+The filter function
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/filter.png
 
 **Image Sources**
