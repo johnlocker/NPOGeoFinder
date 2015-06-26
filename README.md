@@ -3,7 +3,8 @@
 
 Student: Jonathan Klaiber <br>
 Student number: 10004077
-Copyright notice: [LICENSE](../blob/master/LICENSE)
+
+Copyright notice: [LICENSE](https://github.com/johnlocker/NPOGeoFinder/blob/master/LICENSE)
 
 
 ### Application Goals
