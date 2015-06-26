@@ -55,7 +55,7 @@ function placeMarker(map, item) {
 	    			 "<b>Date: </b>" + transDate(item.date) + "<br>" +
 	    			 // info link
 	    			 '<b>Link: </b> <a href="' + item.link +
-	    			 ' target="_blank">' +
+	    			 ' "target=_blank">' +
 	    			 item.link.substring(item.link.indexOf("//") 
 	    			 					 + 2, item.link.indexOf(".nl") 
 	    			 					 + 3) 
