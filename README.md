@@ -27,13 +27,13 @@ User interface
 ![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/screenshot_main.png)
 
 The main interaction window, the map
-![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/map.png
+![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/map.png)
 
 The episode list with items that have no location information
-![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/episodelist.png
+![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/episodelist.png)
 
 The filter function
-![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/filter.png
+![Alt text](https://github.com/johnlocker/NPOGeoFinder/blob/master/docs/filter.png)
 
 **Image Sources**
 
