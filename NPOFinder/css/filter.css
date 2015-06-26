@@ -1,0 +1,75 @@
+/*
+    Jonathan Klaiber
+    Programming Project 2015
+
+    CSS corresponding to filter functionality in fiter.js
+*/
+
+#filterdiv {
+	cursor: pointer;
+}
+
+#filtertoggle {
+  height: 100px;
+  position: absolute;
+  left: 100px;
+  width: 1020px;
+  padding: 0;
+  top: 315px;
+}
+
+.filtertext {
+  width: 50px;
+  height: 50px;
+}
+
+.slidertext {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.inlinediv {
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+
+.programfilter {
+  background: white;
+  height: 30px;
+  color: black;
+}
+
+#filtertext {
+  display: inline-block;
+  position: relative;
+  left: 5px;
+}
+
+.arrow {
+  display: inline-block;
+  width: 0; 
+  height: 0; 
+}
+
+#arrowdiv {
+  display: inline-block;
+  width: 10px;
+}
+
+#arrow-right {
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid #ff6d00;
+}
+
+#arrow-down {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #ff6d00;
+}
+
+#filterdiv {
+  font-size: 15px;
+  top: 280px;
+}

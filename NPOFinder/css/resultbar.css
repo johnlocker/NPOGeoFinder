@@ -1,0 +1,15 @@
+/*
+    Jonathan Klaiber
+    Programming Project 2015
+
+    CSS corresponding to resultbar functionality in resultbar.js
+*/
+
+#results {
+  height: 20px;
+  top: 870px;
+  display: inline-block;
+  opacity: 0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}

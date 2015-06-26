@@ -1,58 +1,70 @@
 <!doctype html>
 <!--
-name:           Jonathan Klaiber
-student nr:     10004077
-Programmeer Project Juni 2015
+  name:           Jonathan Klaiber
+  student nr:     10004077
+  Programmeer Project Juni 2015
 
-Inspired by 
-"https://developers.google.com/maps/documentation
- /javascript/examples/places-searchbox"
- (Google Maps functionality)
+  Inspired by 
+  "https://developers.google.com/maps/documentation
+   /javascript/examples/places-searchbox"
+   (Google Maps functionality)
 
-Libraries:
+  Libraries:
   Google Maps API
   D3.js
   NPO Backstage API
   JSON
+
+  Note:
+  The HTML5 validator on https://validator.w3.org/nu/
+  finds three errors all concering the
+  link to the Google API:
+  "<script src="https://maps.googleapis.com/maps/api/js?
+            v=3.exp&signed_in=true&libraries=places">"
+  I recognized the errors but I'm negelectubg them because
+  the API reference has to be stated in this way.
+  
 -->
 <html lang="en" xml:lang="en">
-  <head
->      <title>NPO Geo Finder</title>
-      <link rel="stylesheet" type="text/css" href="index.css"/>
-      <link rel="stylesheet" type="text/css" href="mb.slider.css"/>
-      <link rel="stylesheet" type="text/css" href="episodelist.css"/>
-      <link rel="stylesheet" type="text/css" href="filter.css"/>
-      <link rel="stylesheet" type="text/css" href="googlemaps.css"/>
-      <link rel="stylesheet" type="text/css" href="resultbar.css"/>
-      <link href='http://fonts.googleapis.com/css?family=Roboto:300,400'
-            rel='stylesheet' type='text/css'>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <head>      
+    <title>NPO Geo Finder</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="css/mb.slider.css"/>
+    <link rel="stylesheet" type="text/css" href="css/episodelist.css"/>
+    <link rel="stylesheet" type="text/css" href="css/filter.css"/>
+    <link rel="stylesheet" type="text/css" href="css/googlemaps.css"/>
+    <link rel="stylesheet" type="text/css" href="css/resultbar.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400'
+          rel='stylesheet' type='text/css'>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
   <body>
-    <script src="apicommunication.js"></script>
-    <script src="d3.js"></script>
-    <script src="datetransformation.js"></script>
-    <script src="episodelist.js"></script>
-    <script src="filter.js"></script>
+    <script src="js/apicommunication.js"></script>
+    <script src="js/d3.js"></script>
+    <script src="js/datetransformation.js"></script>
+    <script src="js/episodelist.js"></script>
+    <script src="js/filter.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?
                 v=3.exp&signed_in=true&libraries=places">
     </script>
-    <script src="marker.js"></script>
-    <script src="resultbar.js"></script>
+    <script src="js/marker.js"></script>
+    <script src="js/resultbar.js"></script>
     <script>
       "use strict";
       // Global constants
-      var resp = null;
       var markers = [];
       var listArray = [];
       var markerArray = [];
-      var hits;
+
       function initialize() {
         /*
         The main function to load the Google Maps Map
         and its functionality. The NPO API communication
         also takes place here in the Google Maps API calllback
         */
+        // Constants
+        var nederlandLatLng ={lat1: 51.5, lng1: 5, lat2: 53.5, lng2: 7};
+        var requestSize = 100;
         // Load the filter function
         LoadFilter();
         // Initialise map
@@ -61,8 +73,8 @@ Libraries:
         });
         // Define start point without location entry (Netherlands)
         var defaultBounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng(51.5, 5),
-            new google.maps.LatLng(53.5, 7));
+            new google.maps.LatLng(nederlandLatLng.lat1, nederlandLatLng.lng1),
+            new google.maps.LatLng(nederlandLatLng.lat2, nederlandLatLng.lng2));
         map.fitBounds(defaultBounds);
         // Creates the search box and link it to the UI element.
         var input = (document.getElementById("pac-input"));
@@ -78,7 +90,7 @@ Libraries:
           }
           var places = searchBox.getPlaces();
           // Return noting if no place is found
-          if (places.length == 0) {
+          if (places.length === 0) {
             return;
           }
           // Getting data for the search marker
@@ -119,17 +131,18 @@ Libraries:
                 return;
               }
               // Resp contains the Query response text
-              resp = req.responseText;
+              var resp = req.responseText;
               // JSON Query response is parsed 
               var obj = JSON.parse(resp);
               var hits = obj.hits.hits;
               listArray = [];
               markerArray = [];
+              var item;
               for (var i = 0; i < hits.length; i++) {
                 // The default program option is NPO journalistiek 
                 var program = "npo_journalistiek";
                 // Correct program is attached to NPO item 
-                if(hits[i]._source.Broadcasters != null) {
+                if(hits[i]._source.Broadcasters !== null) {
                     program = hits[i]._source.Broadcasters[0].Name;
                     var checkProgram = program.toLowerCase();
                     // Program filter is applied on the incoming data
@@ -142,8 +155,8 @@ Libraries:
                 }
                 // Items are "split" into location (markerArray) and
                 // non location (listArray) items
-                if(hits[i]._source.Locations != null) {
-                  var item = new ItemMarker(
+                if(hits[i]._source.Locations !== null) {
+                  item = new ItemMarker(
                     hits[i]._source.Id,
                     hits[i]._source.Title,
                     program,
@@ -156,7 +169,7 @@ Libraries:
                     [markerGeo.A, markerGeo.F]);
                   markerArray.push(item);
                 } else {
-                  var item = new ItemMarker(
+                  item = new ItemMarker(
                     hits[i]._source.Id,
                     hits[i]._source.Title,
                     program,
@@ -170,14 +183,14 @@ Libraries:
                   listArray.push(item);
                 }
               }
-              for (var i = 0; i < markerArray.length; i++) {
-                  placeMarker(map, markerArray[i])
+              for (var j = 0; j < markerArray.length; j++) {
+                  placeMarker(map, markerArray[j]);
               }
               // Loading result bar
               DisplayResultBar(markerName, markerArray, listArray);
               // Load episodelist
               LoadEpisodelist();
-            }
+            };
             // Make connection with API
             req.onreadystatechange();
             // API url
@@ -192,7 +205,9 @@ Libraries:
                         + queryDate(from) 
                         + '", "to": "' 
                         + queryDate(to) 
-                        + '"}}, "size": 100, "sort": "date"}';
+                        + '"}}, "size":"'
+                        + requestSize
+                        + '", "sort": "date"}';
             req.setRequestHeader("Content-Type",
                                  "application/x-www-form-urlencoded");
             // Sending the request

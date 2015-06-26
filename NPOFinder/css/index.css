@@ -1,0 +1,60 @@
+/*
+    Jonathan Klaiber
+    Programming Project 2015
+
+    Image source:
+    All images are obtained from Google Image Search for
+    images with a licence to modify and reuse.
+    All images are modified with regard to size and shape.
+
+    CSS corresponding to general styling of index.html
+*/
+
+body {
+  background-image: url("../images/npo_background.jpg");
+  font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+    height: 500px;
+    width: 1000px;
+    margin: 10px;
+    padding: 10px;
+  }
+
+.intro {
+  position: absolute;
+  color: #ff6d00;
+  margin: 10px;
+  left: 100px;
+  width: 1000px;
+  background-color: black;
+  padding: 10px
+}
+
+#introtext {
+  top: 130px;
+}
+
+#introdescription {
+  top: 185px;
+}
+
+#introresults {
+  top: 130px;
+  margin: 10px;
+  position: absolute;
+  left: 1200px;
+  top: 130px;
+  width: 300px;
+  padding: 10px;
+}
+
+#pagetitle {
+  background-color: transparent;
+  top: 60px;
+  font-size: 40px;
+  font-weight: bold;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  font-style: italic;
+}
